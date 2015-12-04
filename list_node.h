@@ -23,8 +23,6 @@ int DeleteList(tListStruct *pListStruct,
 int AddListNode(tListStruct *pListStruct, void *pdata, 
 	int Conditon(tListNode * pNode, void * args), void * args);
 
-int AddListNodeToTail(tListStruct *pListStruct, void *pdata);
-
 int DeleteListNode(tListStruct *pListStruct, tListNode *pNode);
 
 tListNode * SearchListNode(tListStruct *pListStruct, 

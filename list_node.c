@@ -58,52 +58,44 @@ int DeleteList(tListStruct *pListStruct,
 int AddListNode(tListStruct *pListStruct, void *pdata, 
 	int Conditon(tListNode * pNode, void * args), void * args)
 {
-	if (NULL == pListStruct || NULL == Conditon) {
-		return FAILURE;
-	}
-
-	tListNode *node = (tListNode*)malloc(sizeof(tListNode));
-	node->data = pdata;
-	node->next = NULL;
-
-	tListNode *tempNode = pListStruct->head;
-	while (tempNode != NULL) {
-		if (Conditon(tempNode, args) == SUCCESS) {
-			node->next = tempNode->next;
-			tempNode->next = node;
-			pListStruct->length += 1;
-			return SUCCESS;
-		}
-		tempNode = tempNode->next;
-	}
-	return FAILURE;	
-}
-
-int AddListNodeToTail(tListStruct *pListStruct, void *pdata)
-{
 	if (NULL == pListStruct) {
 		return FAILURE;
 	}
-
+	
 	tListNode *node = (tListNode*)malloc(sizeof(tListNode));
 	node->data = pdata;
 	node->next = NULL;
-
-	if (NULL == pListStruct->head) {
-		pListStruct->head = node;
-		pListStruct->length += 1;
-	}
-
-	if (NULL == pListStruct->tail) {
-		pListStruct->tail = node;
-	}
-	else {
-		pListStruct->tail->next = node;
-		pListStruct->tail = node;
-		pListStruct->length += 1;
-	}
-
-	return SUCCESS;
+	
+	if (NULL == Conditon) {
+    	if (NULL == pListStruct->head) {
+    		pListStruct->head = node;
+    		pListStruct->length += 1;
+    	}
+    
+    	if (NULL == pListStruct->tail) {
+    		pListStruct->tail = node;
+    	}
+    	else {
+    		pListStruct->tail->next = node;
+    		pListStruct->tail = node;
+    		pListStruct->length += 1;
+    	}
+    
+    	return SUCCESS;
+    }
+    else {    
+    	tListNode *tempNode = pListStruct->head;
+    	while (tempNode != NULL) {
+    		if (Conditon(tempNode, args) == SUCCESS) {
+    			node->next = tempNode->next;
+    			tempNode->next = node;
+    			pListStruct->length += 1;
+    			return SUCCESS;
+    		}
+    		tempNode = tempNode->next;
+    	}
+    	return FAILURE;	
+    }
 }
 
 int DeleteListNode(tListStruct *pListStruct, tListNode *pNode)
