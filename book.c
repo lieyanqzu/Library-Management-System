@@ -1,28 +1,47 @@
-#include "book.h"
+/*******************************************************
+ File name: book.c 
+ 
+ Date: 2015.12.4
+ 
+ Description: 图书的库存信息("每一种图书的库存信息包括编
+    号、书名、作者、出版社、出版日期、金额、类别、总入库
+    数量、当前库存量、已借出本数等。")
+    
+ Dependency: list_node
+
+ History: 
+ 
+********************************************************/
+
+
 #include <stdlib.h>
 #include <string.h>
+
+#include "book.h"
 
 #define FLAG_POSITION 100000000
 
 /*
+// 图书库存信息 
 typedef struct {
     int         total_number;
     int         current_number;
     int         lent_number;
 } stock_info;
 
+// 图书信息 
 typedef struct {
     int         id;
-    char*       title;
-    char*       author;
-    char*       press;
+    char        isbn[MAX_STR]; 
+    char        title[MAX_STR];
+    char        author[MAX_STR];
+    char        press[MAX_STR];
     time_t      public_time;
     double      price;
     BookType    type;
     BookStatus  status;
     stock_info* stock;
 } book_info;
-
 */
 
 // 要求把书籍、期刊、报刊分类管理，这样的话操作会更加灵活和方便，可以随时对其相关资料进行添加、删除、修改、查询等操作。
@@ -31,7 +50,8 @@ tListStruct * bookList = NULL;
 tListStruct * periodicalsList = NULL;
 tListStruct * newspaperList = NULL;
 
-book_info * CreateBookPrototype(char *title_, char *author_, char *press_, 
+// 创建图书信息结构 
+book_info * CreateBookPrototype(char *isbn_, char *title_, char *author_, char *press_, 
     time_t time_, double price_, BookType type_, BookStatus status_)
 {
     book_info * pBook = (book_info*)malloc(sizeof(book_info));
@@ -41,9 +61,10 @@ book_info * CreateBookPrototype(char *title_, char *author_, char *press_,
     }
     
     pBook->id = 0;
-    strcpy(pBook->title, title_);
-    strcpy(pBook->author, author_);
-    strcpy(pBook->press, press_);
+    strncpy(pBook->isbn, isbn_, MAX_STR);
+    strncpy(pBook->title, title_, MAX_STR);
+    strncpy(pBook->author, author_, MAX_STR);
+    strncpy(pBook->press, press_, MAX_STR);
     pBook->public_time = time_;
     pBook->price = price_;
     pBook->type = type_;
@@ -53,6 +74,7 @@ book_info * CreateBookPrototype(char *title_, char *author_, char *press_,
     return pBook;
 }
 
+// 按ID搜索 
 static int SearchBookConditon(tListNode * pListNode,void * arg)
 {
     int * pId = (int*)arg;
@@ -65,18 +87,20 @@ static int SearchBookConditon(tListNode * pListNode,void * arg)
     return FAILURE;	       
 }
 
-static int SearchTitleConditon(tListNode * pListNode,void * arg)
+// 按ISBN搜索 
+static int SearchISBNConditon(tListNode * pListNode,void * arg)
 {
-    char * pTitle = (char*)arg;
+    char * pIsbn = (char*)arg;
     tListNode *pNode = (tListNode*)pListNode;
     
-    if (strcmp( ((book_info*)(pNode->data))->title, pTitle ) == 0) {
+    if (strcmp( ((book_info*)(pNode->data))->isbn, pIsbn ) == 0) {
         return SUCCESS;
     }
     
     return FAILURE;
 }
 
+// 获取链表表示的图书类型 
 static BookType GetListFlag(tListStruct * pList)
 {
     if (pList == bookList) {
@@ -93,10 +117,33 @@ static BookType GetListFlag(tListStruct * pList)
     }
 }
 
+// 按图书信息获得所在链表
+static tListStruct * GetListByBookInfo(book_info * pBookInfo)
+{
+    switch (pBookInfo->type) {
+    case BOOK:
+        return bookList;
+    case PERIODICALS:
+        return periodicalsList;
+    case NEWSPAPER:
+        return newspaperList;
+    default:
+        return NULL;
+    }
+}
+
+// 按节点信息获得所在链表 
+static tListStruct * GetListByNode(tListNode * pNode)
+{
+    book_info * pBookInfo = (book_info*)(pNode->data);
+    return GetListByBookInfo(pBookInfo);
+}
+
+// 按ID搜索图书节点 
 tListNode * SearchBookById(int id)
 {
     tListStruct * pList = NULL;
-    switch((BookType)(id / FLAG_POSITION)) {
+    switch((BookType)(id / FLAG_POSITION)) { // 按ID计算图书类型 
     case BOOK:
         pList = bookList;
         break;
@@ -113,26 +160,7 @@ tListNode * SearchBookById(int id)
     return pNode;
 }
 
-static tListStruct * GetListByBookInfo(book_info * pBookInfo)
-{
-    switch (pBookInfo->type) {
-    case BOOK:
-        return bookList;
-    case PERIODICALS:
-        return periodicalsList;
-    case NEWSPAPER:
-        return newspaperList;
-    default:
-        return NULL;
-    }
-}
-
-static tListStruct * GetListByNode(tListNode * pNode)
-{
-    book_info * pBookInfo = (book_info*)(pNode->data);
-    return GetListByBookInfo(pBookInfo);
-}
-
+// 把图书信息结构加入链表 
 int AddToBooksList(book_info * pBookInfo)
 {
     tListStruct * pList = GetListByBookInfo(pBookInfo);
@@ -144,7 +172,8 @@ int AddToBooksList(book_info * pBookInfo)
         pList = CreateList();
     }
     
-    tListNode * pNode = SearchListNode(pList, SearchTitleConditon, pBookInfo->title);
+    // 检查库中是否已有此书籍 
+    tListNode * pNode = SearchListNode(pList, SearchISBNConditon, pBookInfo->isbn);
     
     if (AddListNode(pList, pBookInfo, NULL, NULL) == SUCCESS) {
         tListNode * pTailNode = GetListTail(pList);
@@ -152,9 +181,11 @@ int AddToBooksList(book_info * pBookInfo)
             pBookInfo->id = ( (book_info*)(pTailNode->data) )->id + 1;
         }
         else {
-            pBookInfo->id = 1 + FLAG_POSITION * (int)GetListFlag(pList);
+            // 图书ID首位数表示图书类型 
+            pBookInfo->id = 1 + FLAG_POSITION * (int)GetListFlag(pList); 
         }
         
+        // 修改图书库存信息 
         if (pNode != NULL) {
             stock_info *pStock = ( (book_info*)(pNode->data) )->stock;
             pBookInfo->stock = pStock;
@@ -172,6 +203,7 @@ int AddToBooksList(book_info * pBookInfo)
     return FAILURE;
 }
 
+// 删除图书 
 int RemoveBookById(int id)
 {
     tListNode * pNode = SearchBookById(id);
@@ -194,7 +226,8 @@ int RemoveBookById(int id)
     }
 }
 
-int ModifyBookInfo(int id, void * arg, ModifyFlag mFlag)
+// 修改图书信息 
+int ModifyBookInfo(int id, void * arg, InfoFlag mFlag)
 {
     tListNode * pNode = SearchBookById(id);
     book_info * pBook = (book_info*)(pNode->data);
@@ -205,18 +238,22 @@ int ModifyBookInfo(int id, void * arg, ModifyFlag mFlag)
     BookType * pType = NULL;
     BookStatus * pStatus = NULL;
     
+    // 按InfoFlag确定修改项 
     switch (mFlag) {
+    case ISBN:
+        pChar = (char*)arg;
+        strncpy(pBook->isbn, pChar, MAX_STR);           
     case TITLE:
         pChar = (char*)arg; 
-        strcpy(pBook->title, pChar);
+        strncpy(pBook->title, pChar, MAX_STR);
         break;
     case AUTHOR:
         pChar = (char*)arg;
-        strcpy(pBook->author, pChar);
+        strncpy(pBook->author, pChar, MAX_STR);
         break;
     case PRESS:
         pChar = (char*)arg;
-        strcpy(pBook->press, pChar);
+        strncpy(pBook->press, pChar, MAX_STR);
         break;
     case PUBLIC_TIME:
         pTime = (time_t*)arg;
@@ -239,4 +276,47 @@ int ModifyBookInfo(int id, void * arg, ModifyFlag mFlag)
     }
     
     return SUCCESS;
+}
+
+// 获取图书信息 
+void * GetBookInfo(int id, InfoFlag gFlag)
+{
+    tListNode * pNode = SearchBookById(id);
+    book_info * pBook = (book_info*)(pNode->data);
+    
+    char * pChar = NULL;
+    time_t * pTime = NULL;
+    double * pDouble = NULL;
+    BookType * pType = NULL;
+    BookStatus * pStatus = NULL;
+    
+    // 按InfoFlag确定获取项 
+    switch (gFlag) {
+    case ISBN:
+        pChar = pBook->isbn;
+        return (void*)pChar;
+    case TITLE:
+        pChar = pBook->title;
+        return (void*)pChar;
+    case AUTHOR:
+        pChar = pBook->author;
+        return (void*)pChar;
+    case PRESS:
+        pChar = pBook->press;
+        return (void*)pChar;
+    case PUBLIC_TIME:
+        pTime = &(pBook->public_time);
+        return (void*)pTime;
+    case PRICE:
+        pDouble = &(pBook->price);
+        return (void*)pDouble;
+    case TYPE:
+        pType = &(pBook->type);
+        return (void*)pType;
+    case STATUS:
+        pStatus = &(pBook->status);
+        return (void*)pStatus;
+    default:
+        return NULL;
+    }
 }

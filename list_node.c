@@ -12,8 +12,9 @@
 ********************************************************/
 
 
-#include "list_node.h"
 #include <stdlib.h>
+
+#include "list_node.h"
 
 /*
 // 链表节点原型声明 
@@ -119,6 +120,28 @@ int AddListNode(tListStruct *pListStruct, void *pdata,
     	return FAILURE;	
     }
 }
+
+// 增加链表节点使之成为链表头部 
+int AddListNodeToHead(tListStruct *pListStruct, void *pdata)
+{
+    if (NULL == pListStruct) {
+		return FAILURE;
+	}
+	
+	tListNode *node = (tListNode*)malloc(sizeof(tListNode));
+	node->data = pdata;
+	node->next = NULL;
+	
+	if (NULL == pListStruct->head) {
+		AddListNode(pListStruct, pdata, NULL, NULL);
+    }
+    else {
+        tListNode * pHead = pListStruct->head;
+        node->next = pHead;
+        pListStruct->head = node;
+        pListStruct->length += 1;
+    }
+} 
 
 // 删除链表中某一节点 
 int DeleteListNode(tListStruct *pListStruct, tListNode *pNode)

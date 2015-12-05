@@ -1,15 +1,36 @@
+/*******************************************************
+ File name: book.h
+ 
+ Date: 2015.12.4
+ 
+ Description: 图书的库存信息("每一种图书的库存信息包括编
+    号、书名、作者、出版社、出版日期、金额、类别、总入库
+    数量、当前库存量、已借出本数等。")
+    
+ Dependency: list_node
+
+ History: 
+ 
+********************************************************/
+
+
 #ifndef _BOOK_H_
 #define _BOOK_H_
 
-#include "list_node.h"
 #include <time.h>
 
+#include "list_node.h"
+
+#define MAX_STR 120
+
+// 图书类型分类 
 typedef enum {
     BOOK = 1, 
     PERIODICALS = 2, 
     NEWSPAPER = 3, 
 } BookType;
 
+// 图书状态 
 typedef enum {
     IDLE = 0, 
     LENT = 1, 
@@ -17,29 +38,32 @@ typedef enum {
     OFF_SHELF = 3, 
 } BookStatus;
 
+// 调用Setter/Getter方法时需要修改的内容项 
 typedef enum {
-    TITLE = 0, 
-    AUTHOR = 1, 
-    PRESS = 2, 
-    PUBLIC_TIME = 3, 
-    PRICE = 4, 
-    TYPE = 5, 
-    STATUS = 6, 
-} ModifyFlag;
+    ISBN = 0, 
+    TITLE = 1, 
+    AUTHOR = 2, 
+    PRESS = 3, 
+    PUBLIC_TIME = 4, 
+    PRICE = 5, 
+    TYPE = 6, 
+    STATUS = 7, 
+} InfoFlag;
 
-// 每一种图书的库存信息包括编号、书名、作者、出版社、出版日期、金额、类别、总入库数量、当前库存量、已借出本数等。
-
+// 图书库存信息 
 typedef struct {
     int         total_number;
     int         current_number;
     int         lent_number;
 } stock_info;
 
+// 图书信息 
 typedef struct {
     int         id;
-    char*       title;
-    char*       author;
-    char*       press;
+    char        isbn[MAX_STR]; 
+    char        title[MAX_STR];
+    char        author[MAX_STR];
+    char        press[MAX_STR];
     time_t      public_time;
     double      price;
     BookType    type;
@@ -47,25 +71,38 @@ typedef struct {
     stock_info* stock;
 } book_info;
 
-book_info * CreateBookPrototype(char *title_, char *author_, char *press_, 
+// 创建图书信息结构 
+book_info * CreateBookPrototype(char *isbn, char *title_, char *author_, char *press_, 
     time_t time_, double price_, BookType type_, BookStatus status_);
 
+// 按ID搜索 
 static int SearchBookConditon(tListNode * pListNode,void * arg);
 
-static int SearchTitleConditon(tListNode * pListNode,void * arg);
+// 按ISBN搜索 
+static int SearchISBNConditon(tListNode * pListNode,void * arg);
 
+// 获取链表表示的图书类型 
 static BookType GetListFlag(tListStruct * pList);
 
-tListNode * SearchBookById(int id);
-
+// 按图书信息获得所在链表 
 static tListStruct * GetListByBookInfo(book_info * pBookInfo);
 
+// 按节点信息获得所在链表 
 static tListStruct * GetListByNode(tListNode * pNode);
 
+// 按ID搜索图书节点 
+tListNode * SearchBookById(int id);
+
+// 把图书信息结构加入链表 
 int AddToBooksList(book_info * pBookInfo);
 
+// 删除图书 
 int RemoveBookById(int id);
 
-int ModifyBookInfo(int id, void * arg, ModifyFlag mFlag);
+// 修改图书信息 
+int ModifyBookInfo(int id, void * arg, InfoFlag mFlag);
+
+// 获取图书信息 
+void * GetBookInfo(int id, InfoFlag gFlag);
 
 #endif

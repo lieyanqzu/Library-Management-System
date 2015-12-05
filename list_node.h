@@ -42,6 +42,9 @@ int DeleteList(tListStruct *pListStruct,
 int AddListNode(tListStruct *pListStruct, void *pdata, 
 	int Conditon(tListNode * pNode, void * args), void * args);
 
+// 增加链表节点使之成为链表头部 
+int AddListNodeToHead(tListStruct *pListStruct, void *pdata);
+
 // 删除链表中某一节点 
 int DeleteListNode(tListStruct *pListStruct, tListNode *pNode);
 
