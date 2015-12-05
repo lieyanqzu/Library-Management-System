@@ -5,9 +5,9 @@
 #include <time.h>
 
 typedef enum {
-    BOOK = 0, 
-    PERIODICALS = 1, 
-    NEWSPAPER = 2, 
+    BOOK = 1, 
+    PERIODICALS = 2, 
+    NEWSPAPER = 3, 
 } BookType;
 
 typedef enum {
@@ -46,5 +46,26 @@ typedef struct {
     BookStatus  status;
     stock_info* stock;
 } book_info;
+
+book_info * CreateBookPrototype(char *title_, char *author_, char *press_, 
+    time_t time_, double price_, BookType type_, BookStatus status_);
+
+static int SearchBookConditon(tListNode * pListNode,void * arg);
+
+static int SearchTitleConditon(tListNode * pListNode,void * arg);
+
+static BookType GetListFlag(tListStruct * pList);
+
+tListNode * SearchBookById(int id);
+
+static tListStruct * GetListByBookInfo(book_info * pBookInfo);
+
+static tListStruct * GetListByNode(tListNode * pNode);
+
+int AddToBooksList(book_info * pBookInfo);
+
+int RemoveBookById(int id);
+
+int ModifyBookInfo(int id, void * arg, ModifyFlag mFlag);
 
 #endif

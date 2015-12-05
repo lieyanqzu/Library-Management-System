@@ -7,9 +7,6 @@
 // 每一本被借阅的书都包括如下信息：编号、书名、金额、借书证号、借书日期、到期日期、罚款金额等。
 typedef struct {
     int     id;
-    char*   name;
-    double  price;
-    
     char*   license;
     time_t  borrow_time;
     time_t  expire_time;

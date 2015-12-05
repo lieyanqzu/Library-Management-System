@@ -31,6 +31,28 @@ tListStruct * bookList = NULL;
 tListStruct * periodicalsList = NULL;
 tListStruct * newspaperList = NULL;
 
+book_info * CreateBookPrototype(char *title_, char *author_, char *press_, 
+    time_t time_, double price_, BookType type_, BookStatus status_)
+{
+    book_info * pBook = (book_info*)malloc(sizeof(book_info));
+    
+    if (NULL == pBook) {
+        return NULL;
+    }
+    
+    pBook->id = 0;
+    strcpy(pBook->title, title_);
+    strcpy(pBook->author, author_);
+    strcpy(pBook->press, press_);
+    pBook->public_time = time_;
+    pBook->price = price_;
+    pBook->type = type_;
+    pBook->status = status_;
+    pBook->stock = NULL;
+    
+    return pBook;
+}
+
 static int SearchBookConditon(tListNode * pListNode,void * arg)
 {
     int * pId = (int*)arg;
@@ -55,17 +77,33 @@ static int SearchTitleConditon(tListNode * pListNode,void * arg)
     return FAILURE;
 }
 
+static BookType GetListFlag(tListStruct * pList)
+{
+    if (pList == bookList) {
+        return BOOK;
+    }
+    else if (pList == periodicalsList) {
+        return PERIODICALS;
+    }
+    else if (pList == newspaperList) {
+        return NEWSPAPER;
+    } 
+    else {
+        return 0;
+    }
+}
+
 tListNode * SearchBookById(int id)
 {
     tListStruct * pList = NULL;
-    switch(id / FLAG_POSITION) {
-    case 1:
+    switch((BookType)(id / FLAG_POSITION)) {
+    case BOOK:
         pList = bookList;
         break;
-    case 2:
+    case PERIODICALS:
         pList = periodicalsList;
         break;
-    case 3:
+    case NEWSPAPER:
         pList = newspaperList;
         break;
     default:
@@ -75,7 +113,8 @@ tListNode * SearchBookById(int id)
     return pNode;
 }
 
-static tListStruct * GetListByBookInfo(book_info * pBookInfo) {
+static tListStruct * GetListByBookInfo(book_info * pBookInfo)
+{
     switch (pBookInfo->type) {
     case BOOK:
         return bookList;
@@ -88,7 +127,8 @@ static tListStruct * GetListByBookInfo(book_info * pBookInfo) {
     }
 }
 
-static tListStruct * GetListByNode(tListNode * pNode) {
+static tListStruct * GetListByNode(tListNode * pNode)
+{
     book_info * pBookInfo = (book_info*)(pNode->data);
     return GetListByBookInfo(pBookInfo);
 }
@@ -107,6 +147,14 @@ int AddToBooksList(book_info * pBookInfo)
     tListNode * pNode = SearchListNode(pList, SearchTitleConditon, pBookInfo->title);
     
     if (AddListNode(pList, pBookInfo, NULL, NULL) == SUCCESS) {
+        tListNode * pTailNode = GetListTail(pList);
+        if (pTailNode != NULL) {
+            pBookInfo->id = ( (book_info*)(pTailNode->data) )->id + 1;
+        }
+        else {
+            pBookInfo->id = 1 + FLAG_POSITION * (int)GetListFlag(pList);
+        }
+        
         if (pNode != NULL) {
             stock_info *pStock = ( (book_info*)(pNode->data) )->stock;
             pBookInfo->stock = pStock;
@@ -151,32 +199,39 @@ int ModifyBookInfo(int id, void * arg, ModifyFlag mFlag)
     tListNode * pNode = SearchBookById(id);
     book_info * pBook = (book_info*)(pNode->data);
     
-    char * pChar = (char*)arg;
-    time_t * pTime = (time_t*)arg;
-    double * pDouble = (double*)arg;
-    BookType * pType = (BookType*)arg;
-    BookStatus * pStatus = (BookStatus*)arg;
+    char * pChar = NULL;
+    time_t * pTime = NULL;
+    double * pDouble = NULL;
+    BookType * pType = NULL;
+    BookStatus * pStatus = NULL;
     
     switch (mFlag) {
     case TITLE:
+        pChar = (char*)arg; 
         strcpy(pBook->title, pChar);
         break;
     case AUTHOR:
+        pChar = (char*)arg;
         strcpy(pBook->author, pChar);
         break;
     case PRESS:
+        pChar = (char*)arg;
         strcpy(pBook->press, pChar);
         break;
     case PUBLIC_TIME:
+        pTime = (time_t*)arg;
         pBook->public_time = *pTime;
         break;
     case PRICE:
+        pDouble = (double*)arg;
         pBook->price = *pDouble;
         break;
     case TYPE:
+        pType = (BookType*)arg;
         pBook->type = *pType;
         break;
     case STATUS:
+        pStatus = (BookStatus*)arg;
         pBook->status = *pStatus;
         break;
     default:
