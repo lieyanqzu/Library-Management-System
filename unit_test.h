@@ -14,6 +14,9 @@
 #define _UNIT_TEST_H_
 
 // list_node²âÊÔ
-void testListNode(); 
+void testListNode();
+
+// book²âÊÔ´úÂë 
+void testBook();
 
 #endif

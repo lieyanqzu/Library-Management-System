@@ -11,11 +11,18 @@
 ********************************************************/
 
 
-#include "unit_test.h"
+#include <time.h>
+#include <stdio.h>
 
+#include "unit_test.h"
+#include "book.h"
 int main(int argc, char* argv[])
 {
-    testListNode();
+    // list_node≤‚ ‘
+//    testListNode();
+    
+    // book≤‚ ‘
+//    testBook(); 
     
     return 0;
 }

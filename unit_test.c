@@ -4,6 +4,8 @@
  Date: 2015.12.5
  
  Description: 单元测试代码 
+ 
+ target: list_node, book
 
  History: 
  
@@ -14,8 +16,10 @@
 #include <stdlib.h>
 #include <assert.h>
 
-#include "list_node.h" 
 #include "unit_test.h"
+
+#include "list_node.h" 
+#include "book.h"
 
 // list_node测试代码 
 // -----------------------------------------------------
@@ -83,4 +87,46 @@
         
         DeleteList(list, NULL, NULL);
     } 
+// -----------------------------------------------------
+
+
+// book测试代码 
+// -----------------------------------------------------
+    void testBook()
+    {
+        // 声明测试数据变量 
+        int         id;
+        char        isbn[MAX_STR]; 
+        char        title[MAX_STR];
+        char        author[MAX_STR];
+        char        press[MAX_STR];
+        time_t      public_time;
+        double      price;
+        
+        int         dType;
+        BookType    type;
+        
+        int i;
+        for (i = 0; i < 3; i++) {
+            scanf("%s", isbn);
+            scanf("%s", title);
+            scanf("%s", author);
+            scanf("%s", press);
+            public_time = time(NULL);
+            scanf("%lf", &price);
+            scanf("%d", &dType);
+            type = (BookType)dType;
+            
+            // 测试 CreateBookPrototype 
+            book_info * pBook = CreateBookPrototype(isbn, title, author, press, public_time, price, type);
+            
+            // 测试 AddToBooksList 
+            id = AddToBooksList(pBook);
+            
+            // 测试属性Getter/Setter 
+            printf("%s\n", ((char*)GetBookInfo(id, TITLE)) );
+            ModifyBookInfo(id, "6666", TITLE);
+            printf("%s\n", ((char*)GetBookInfo(id, TITLE)) );
+        }
+    }
 // -----------------------------------------------------

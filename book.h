@@ -73,7 +73,7 @@ typedef struct {
 
 // 创建图书信息结构 
 book_info * CreateBookPrototype(char *isbn, char *title_, char *author_, char *press_, 
-    time_t time_, double price_, BookType type_, BookStatus status_);
+    time_t time_, double price_, BookType type_);
 
 // 按ID搜索 
 static int SearchBookConditon(tListNode * pListNode,void * arg);
@@ -91,7 +91,7 @@ static tListStruct * GetListByBookInfo(book_info * pBookInfo);
 static tListStruct * GetListByNode(tListNode * pNode);
 
 // 按ID搜索图书节点 
-tListNode * SearchBookById(int id);
+static tListNode * SearchBookById(int id);
 
 // 把图书信息结构加入链表 
 int AddToBooksList(book_info * pBookInfo);

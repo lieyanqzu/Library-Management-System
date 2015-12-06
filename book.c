@@ -52,7 +52,7 @@ tListStruct * newspaperList = NULL;
 
 // 创建图书信息结构 
 book_info * CreateBookPrototype(char *isbn_, char *title_, char *author_, char *press_, 
-    time_t time_, double price_, BookType type_, BookStatus status_)
+    time_t time_, double price_, BookType type_)
 {
     book_info * pBook = (book_info*)malloc(sizeof(book_info));
     
@@ -68,7 +68,7 @@ book_info * CreateBookPrototype(char *isbn_, char *title_, char *author_, char *
     pBook->public_time = time_;
     pBook->price = price_;
     pBook->type = type_;
-    pBook->status = status_;
+    pBook->status = IDLE;
     pBook->stock = NULL;
     
     return pBook;
@@ -140,7 +140,7 @@ static tListStruct * GetListByNode(tListNode * pNode)
 }
 
 // 按ID搜索图书节点 
-tListNode * SearchBookById(int id)
+static tListNode * SearchBookById(int id)
 {
     tListStruct * pList = NULL;
     switch((BookType)(id / FLAG_POSITION)) { // 按ID计算图书类型 
@@ -169,20 +169,33 @@ int AddToBooksList(book_info * pBookInfo)
     }
     
     if (NULL == pList) {
-        pList = CreateList();
+        switch (pBookInfo->type) {
+        case BOOK:
+            bookList = CreateList();
+            break;
+        case PERIODICALS:
+            periodicalsList = CreateList();
+            break;
+        case NEWSPAPER:
+            newspaperList = CreateList();
+            break;
+        default:
+            break;
+        }
     }
+    pList = GetListByBookInfo(pBookInfo);
     
     // 检查库中是否已有此书籍 
     tListNode * pNode = SearchListNode(pList, SearchISBNConditon, pBookInfo->isbn);
-    
+    tListNode * pTailNode = GetListTail(pList);
+
     if (AddListNode(pList, pBookInfo, NULL, NULL) == SUCCESS) {
-        tListNode * pTailNode = GetListTail(pList);
-        if (pTailNode != NULL) {
-            pBookInfo->id = ( (book_info*)(pTailNode->data) )->id + 1;
+        if (NULL == pTailNode) {
+            pBookInfo->id = 1 + FLAG_POSITION * (int)GetListFlag(pList); 
         }
         else {
             // 图书ID首位数表示图书类型 
-            pBookInfo->id = 1 + FLAG_POSITION * (int)GetListFlag(pList); 
+            pBookInfo->id = ( (book_info*)(pTailNode->data) )->id + 1;
         }
         
         // 修改图书库存信息 
@@ -199,6 +212,7 @@ int AddToBooksList(book_info * pBookInfo)
             pStock->current_number = 1;
             pStock->lent_number = 0;
         }
+        return pBookInfo->id;
     }
     return FAILURE;
 }
@@ -281,14 +295,14 @@ int ModifyBookInfo(int id, void * arg, InfoFlag mFlag)
 // 获取图书信息 
 void * GetBookInfo(int id, InfoFlag gFlag)
 {
-    tListNode * pNode = SearchBookById(id);
-    book_info * pBook = (book_info*)(pNode->data);
-    
     char * pChar = NULL;
     time_t * pTime = NULL;
     double * pDouble = NULL;
     BookType * pType = NULL;
     BookStatus * pStatus = NULL;
+    
+    tListNode * pNode = SearchBookById(id);
+    book_info * pBook = (book_info*)(pNode->data);
     
     // 按InfoFlag确定获取项 
     switch (gFlag) {
@@ -310,9 +324,6 @@ void * GetBookInfo(int id, InfoFlag gFlag)
     case PRICE:
         pDouble = &(pBook->price);
         return (void*)pDouble;
-    case TYPE:
-        pType = &(pBook->type);
-        return (void*)pType;
     case STATUS:
         pStatus = &(pBook->status);
         return (void*)pStatus;
