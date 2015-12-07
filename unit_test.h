@@ -5,7 +5,7 @@
  
  Description: 单元测试代码 
 
- History: 
+ History: 2015.12.7 增加 book_lent
  
 ********************************************************/
 
@@ -18,5 +18,8 @@ void testListNode();
 
 // book测试代码 
 void testBook();
+
+// book_lent测试代码 
+void testBookLent();
 
 #endif

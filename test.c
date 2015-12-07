@@ -22,7 +22,10 @@ int main(int argc, char* argv[])
 //    testListNode();
     
     // book≤‚ ‘
-//    testBook(); 
+//    testBook();
+
+    // book_lent≤‚ ‘ 
+//    testBookLent(); 
     
     return 0;
 }

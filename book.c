@@ -331,3 +331,11 @@ void * GetBookInfo(int id, InfoFlag gFlag)
         return NULL;
     }
 }
+
+// 返回图示节点ID 
+int GetBookID(tListNode * pNode)
+{
+    book_info * pBook = (book_info*)(pNode->data);
+    return pBook->id;
+}
+

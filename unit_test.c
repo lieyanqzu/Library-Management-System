@@ -5,21 +5,24 @@
  
  Description: 单元测试代码 
  
- target: list_node, book
+ target: list_node, book, book_lent 
 
- History: 
+ History: 2015.12.7 增加 book_lent
  
 ********************************************************/
 
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <time.h>
 #include <assert.h>
 
 #include "unit_test.h"
 
 #include "list_node.h" 
 #include "book.h"
+#include "book_lent.h"
 
 // list_node测试代码 
 // -----------------------------------------------------
@@ -124,9 +127,41 @@
             id = AddToBooksList(pBook);
             
             // 测试属性Getter/Setter 
+            assert(strcmp( (char*)GetBookInfo(id, TITLE), title) == 0);
             printf("%s\n", ((char*)GetBookInfo(id, TITLE)) );
             ModifyBookInfo(id, "6666", TITLE);
+            assert(strcmp( (char*)GetBookInfo(id, TITLE), "6666") == 0);
             printf("%s\n", ((char*)GetBookInfo(id, TITLE)) );
         }
     }
+// -----------------------------------------------------
+
+
+// book_lent测试代码 
+// -----------------------------------------------------
+void testBookLent()
+{
+    // 声明测试数据变量     
+    int id1 = 100000002;
+    int id2 = 200000033;
+    int license1 = 149074999;
+    int license2 = 149074998;
+    time_t borrow_time = time(NULL);
+
+    tListStruct * pLentList = GetBookLentList();
+    tListNode * pHeadLentNode = NULL;
+    
+    // 测试 AddToBookLentList 
+    AddToBookLentList(CreateLentPrototype(id1, license1, borrow_time));
+    SetLentExpireTime(id1, time(NULL)+2592000);
+    AddToBookLentList(CreateLentPrototype(id2, license2, borrow_time));
+    SetLentExpireTime(id2, time(NULL)+2592000);
+    pHeadLentNode = GetListHead(pLentList);
+    
+    // 测试 GetLentId
+    assert(GetLentId(pHeadLentNode) == id1);
+    
+    // 测试 GetLentBookInfo 
+    assert(*((int*)GetLentBookInfo(id2, LICENSE)) == license2); 
+} 
 // -----------------------------------------------------

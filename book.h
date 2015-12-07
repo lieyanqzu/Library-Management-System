@@ -105,4 +105,7 @@ int ModifyBookInfo(int id, void * arg, InfoFlag mFlag);
 // 获取图书信息 
 void * GetBookInfo(int id, InfoFlag gFlag);
 
+// 返回图示节点ID 
+int GetBookID(tListNode * pNode); 
+
 #endif
