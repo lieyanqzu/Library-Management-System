@@ -117,26 +117,11 @@ static BookType GetListFlag(tListStruct * pList)
     }
 }
 
-// 按图书信息获得所在链表
-static tListStruct * GetListByBookInfo(book_info * pBookInfo)
-{
-    switch (pBookInfo->type) {
-    case BOOK:
-        return bookList;
-    case PERIODICALS:
-        return periodicalsList;
-    case NEWSPAPER:
-        return newspaperList;
-    default:
-        return NULL;
-    }
-}
-
 // 按节点信息获得所在链表 
 static tListStruct * GetListByNode(tListNode * pNode)
 {
     book_info * pBookInfo = (book_info*)(pNode->data);
-    return GetListByBookInfo(pBookInfo);
+    return GetListByType(pBookInfo->type);
 }
 
 // 按ID搜索图书节点 
@@ -160,10 +145,25 @@ static tListNode * SearchBookById(int id)
     return pNode;
 }
 
+// 返回所需要的链表
+tListStruct * GetListByType(BookType type)
+{
+    switch (type) {
+    case BOOK:
+        return bookList;
+    case PERIODICALS:
+        return periodicalsList;
+    case NEWSPAPER:
+        return newspaperList;
+    default:
+        return NULL;
+    }
+}
+
 // 把图书信息结构加入链表 
 int AddToBooksList(book_info * pBookInfo)
 {
-    tListStruct * pList = GetListByBookInfo(pBookInfo);
+    tListStruct * pList = GetListByType(pBookInfo->type);
     if (NULL == pBookInfo) {
         return FAILURE;
     }
@@ -183,7 +183,7 @@ int AddToBooksList(book_info * pBookInfo)
             break;
         }
     }
-    pList = GetListByBookInfo(pBookInfo);
+    pList = GetListByType(pBookInfo->type);
     
     // 检查库中是否已有此书籍 
     tListNode * pNode = SearchListNode(pList, SearchISBNConditon, pBookInfo->isbn);
@@ -300,6 +300,7 @@ void * GetBookInfo(int id, InfoFlag gFlag)
     double * pDouble = NULL;
     BookType * pType = NULL;
     BookStatus * pStatus = NULL;
+    stock_info * pStock = NULL;
     
     tListNode * pNode = SearchBookById(id);
     book_info * pBook = (book_info*)(pNode->data);
@@ -327,12 +328,15 @@ void * GetBookInfo(int id, InfoFlag gFlag)
     case STATUS:
         pStatus = &(pBook->status);
         return (void*)pStatus;
+    case STOCK:
+        pStock = pBook->stock;
+        return (void*)pStock;
     default:
         return NULL;
     }
 }
 
-// 返回图示节点ID 
+// 返回图书节点ID 
 int GetBookID(tListNode * pNode)
 {
     book_info * pBook = (book_info*)(pNode->data);

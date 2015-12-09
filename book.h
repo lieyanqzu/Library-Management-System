@@ -21,7 +21,8 @@
 
 #include "list_node.h"
 
-#define MAX_STR 120
+#define MAX_STR 128
+#define ISBN_LEN 13
 
 // 图书类型分类 
 typedef enum {
@@ -48,6 +49,7 @@ typedef enum {
     PRICE = 5, 
     TYPE = 6, 
     STATUS = 7, 
+    STOCK = 8, 
 } InfoFlag;
 
 // 图书库存信息 
@@ -60,7 +62,7 @@ typedef struct {
 // 图书信息 
 typedef struct {
     int         id;
-    char        isbn[MAX_STR]; 
+    char        isbn[ISBN_LEN]; 
     char        title[MAX_STR];
     char        author[MAX_STR];
     char        press[MAX_STR];
@@ -84,14 +86,14 @@ static int SearchISBNConditon(tListNode * pListNode,void * arg);
 // 获取链表表示的图书类型 
 static BookType GetListFlag(tListStruct * pList);
 
-// 按图书信息获得所在链表 
-static tListStruct * GetListByBookInfo(book_info * pBookInfo);
-
 // 按节点信息获得所在链表 
 static tListStruct * GetListByNode(tListNode * pNode);
 
 // 按ID搜索图书节点 
 static tListNode * SearchBookById(int id);
+
+// 返回所需要的链表
+tListStruct * GetListByType(BookType type); 
 
 // 把图书信息结构加入链表 
 int AddToBooksList(book_info * pBookInfo);
@@ -105,7 +107,7 @@ int ModifyBookInfo(int id, void * arg, InfoFlag mFlag);
 // 获取图书信息 
 void * GetBookInfo(int id, InfoFlag gFlag);
 
-// 返回图示节点ID 
+// 返回图书节点ID 
 int GetBookID(tListNode * pNode); 
 
 #endif

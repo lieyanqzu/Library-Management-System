@@ -77,7 +77,7 @@ int DeleteList(tListStruct *pListStruct,
 
 // 增加链表节点至链表尾部[，可选按条件插入节点] 
 int AddListNode(tListStruct *pListStruct, void *pdata, 
-	int Conditon(tListNode * pNode, void * args), void * args)
+	int Conditon(tListNode * pNode, tListNode * pAddNode, void * args), void * args)
 {
 	if (NULL == pListStruct) {
 		return FAILURE;
@@ -109,7 +109,7 @@ int AddListNode(tListStruct *pListStruct, void *pdata,
         // 提供添加条件时按条件搜索并插入 
     	tListNode *tempNode = pListStruct->head;
     	while (tempNode != NULL) {
-    		if (Conditon(tempNode, args) == SUCCESS) {
+    		if (Conditon(tempNode, node, args) == SUCCESS) {
     			node->next = tempNode->next;
     			tempNode->next = node;
     			pListStruct->length += 1;
@@ -221,4 +221,21 @@ tListNode * GetListNext(tListNode *pNode)
 	}
 	
 	return pNode->next;
+}
+
+// 返回当前节点的上一节点 
+tListNode * GetListPrev(tListStruct * pList, tListNode *pNode)
+{
+    if (pList == NULL || pNode == NULL) {
+        return NULL;
+    }
+    
+    tListNode * pTempNode = pList->head;
+    while (pTempNode->next != NULL) {
+        if (pTempNode->next == pNode) {
+            return pTempNode;
+        }
+        pTempNode = pTempNode->next;
+    }
+    return NULL;
 }

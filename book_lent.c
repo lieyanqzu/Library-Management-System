@@ -34,7 +34,7 @@ typedef struct {
 tListStruct * bookLentList = NULL;
 
 // 按ID搜索已借出图书
-static int SearchLentBookConditon(tListNode * pListNode,void * arg)
+static int SearchLentBookConditon(tListNode * pListNode, void * arg)
 {
     int * pId = (int*)arg;
     tListNode *pNode = (tListNode *)pListNode;

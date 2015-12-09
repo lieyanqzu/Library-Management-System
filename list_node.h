@@ -40,7 +40,7 @@ int DeleteList(tListStruct *pListStruct,
 
 // 增加链表节点至链表尾部[，可选按条件插入节点] 
 int AddListNode(tListStruct *pListStruct, void *pdata, 
-	int Conditon(tListNode * pNode, void * args), void * args);
+	int Conditon(tListNode * pNode, tListNode * pAddNode, void * args), void * args);
 
 // 增加链表节点使之成为链表头部 
 int AddListNodeToHead(tListStruct *pListStruct, void *pdata);
@@ -60,5 +60,8 @@ tListNode * GetListTail(tListStruct *pListStruct);
 
 // 返回当前节点的下一节点 
 tListNode * GetListNext(tListNode *pNode);
+
+// 返回当前节点的上一节点 
+tListNode * GetListPrev(tListStruct * pList, tListNode *pNode);
 
 #endif
