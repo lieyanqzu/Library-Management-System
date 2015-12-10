@@ -256,7 +256,8 @@ int ModifyBookInfo(int id, void * arg, InfoFlag mFlag)
     switch (mFlag) {
     case ISBN:
         pChar = (char*)arg;
-        strncpy(pBook->isbn, pChar, MAX_STR);           
+        strncpy(pBook->isbn, pChar, MAX_STR);
+        break;          
     case TITLE:
         pChar = (char*)arg; 
         strncpy(pBook->title, pChar, MAX_STR);
@@ -295,15 +296,15 @@ int ModifyBookInfo(int id, void * arg, InfoFlag mFlag)
 // 获取图书信息 
 void * GetBookInfo(int id, InfoFlag gFlag)
 {
+    tListNode * pNode = SearchBookById(id);
+    book_info * pBook = (book_info*)(pNode->data);
+    
     char * pChar = NULL;
     time_t * pTime = NULL;
     double * pDouble = NULL;
     BookType * pType = NULL;
     BookStatus * pStatus = NULL;
     stock_info * pStock = NULL;
-    
-    tListNode * pNode = SearchBookById(id);
-    book_info * pBook = (book_info*)(pNode->data);
     
     // 按InfoFlag确定获取项 
     switch (gFlag) {
