@@ -1,11 +1,11 @@
-/*******************************************************
+ï»¿/*******************************************************
  File name: unit_test.h
  
  Date: 2015.12.5
  
- Description: µ¥Ôª²âÊÔ´úÂë 
+ Description: å•å…ƒæµ‹è¯•ä»£ç  
 
- History: 2015.12.7 Ôö¼Ó book_lent
+ History: 2015.12.7 å¢åŠ  book_lent
  
 ********************************************************/
 
@@ -13,13 +13,13 @@
 #ifndef _UNIT_TEST_H_
 #define _UNIT_TEST_H_
 
-// list_node²âÊÔ
+// list_nodeæµ‹è¯•
 void testListNode();
 
-// book²âÊÔ´úÂë 
+// bookæµ‹è¯•ä»£ç  
 void testBook();
 
-// book_lent²âÊÔ´úÂë 
+// book_lentæµ‹è¯•ä»£ç  
 void testBookLent();
 
 #endif

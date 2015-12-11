@@ -1,13 +1,13 @@
-/*******************************************************
+ï»¿/*******************************************************
  File name: unit_test.c
  
  Date: 2015.12.5
  
- Description: µ¥Ôª²âÊÔ´úÂë 
+ Description: å•å…ƒæµ‹è¯•ä»£ç  
  
  target: list_node, book, book_lent 
 
- History: 2015.12.7 Ôö¼Ó book_lent
+ History: 2015.12.7 å¢åŠ  book_lent
  
 ********************************************************/
 
@@ -24,14 +24,14 @@
 #include "book.h"
 #include "book_lent.h"
 
-// list_node²âÊÔ´úÂë 
+// list_nodeæµ‹è¯•ä»£ç  
 // -----------------------------------------------------
-    // ¶¨Òå²âÊÔÓÃÊı¾İ 
+    // å®šä¹‰æµ‹è¯•ç”¨æ•°æ® 
     typedef struct simple {
         int data;
     } tSimple;
     
-    // list_node²âÊÔÓÃÀıËÑË÷Ìõ¼ş 
+    // list_nodeæµ‹è¯•ç”¨ä¾‹æœç´¢æ¡ä»¶ 
     static int SearchSimpleConditon(tListNode * pListNode,void * arg)
     {
         int * pData = (int*)arg;
@@ -49,7 +49,7 @@
         tListStruct * list = CreateList();
         int i;
         
-        // ×¼±¸²âÊÔÓÃÀı 
+        // å‡†å¤‡æµ‹è¯•ç”¨ä¾‹ 
         int testArray[4] = {3, 4, 5, 6};
         tSimple testSimple[4];
         
@@ -70,7 +70,7 @@
         node = headNode = GetListHead(list);
         tailNode = GetListTail(list);
         
-        // ²âÊÔ AddListNode 
+        // æµ‹è¯• AddListNode 
         printf("list_node test: \n");
         for (i = 0; i < 4; i++) {
             printf("%d  ", ( (tSimple*)(node->data) )->data);
@@ -78,11 +78,11 @@
             node = node->next;
         }
         
-        // ²âÊÔ SearchListNode
+        // æµ‹è¯• SearchListNode
         assert(SearchListNode(list, SearchSimpleConditon, (void*)&testArray[0]) == headNode); 
         assert(SearchListNode(list, SearchSimpleConditon, (void*)&testArray[3]) == tailNode);
         
-        // ²âÊÔ DeleteListNode
+        // æµ‹è¯• DeleteListNode
         if (DeleteListNode(list, headNode) == SUCCESS) {
             tListNode * newHead = GetListHead(list);
             assert(( (tSimple*)(newHead->data) )->data == testArray[1]);
@@ -93,11 +93,11 @@
 // -----------------------------------------------------
 
 
-// book²âÊÔ´úÂë 
+// bookæµ‹è¯•ä»£ç  
 // -----------------------------------------------------
     void testBook()
     {
-        // ÉùÃ÷²âÊÔÊı¾İ±äÁ¿ 
+        // å£°æ˜æµ‹è¯•æ•°æ®å˜é‡ 
         int         id;
         char        isbn[MAX_STR]; 
         char        title[MAX_STR];
@@ -120,13 +120,13 @@
             scanf("%d", &dType);
             type = (BookType)dType;
             
-            // ²âÊÔ CreateBookPrototype 
+            // æµ‹è¯• CreateBookPrototype 
             book_info * pBook = CreateBookPrototype(isbn, title, author, press, public_time, price, type);
             
-            // ²âÊÔ AddToBooksList 
+            // æµ‹è¯• AddToBooksList 
             id = AddToBooksList(pBook);
             
-            // ²âÊÔÊôĞÔGetter/Setter 
+            // æµ‹è¯•å±æ€§Getter/Setter 
             assert(strcmp( (char*)GetBookInfo(id, TITLE), title) == 0);
             printf("%s\n", ((char*)GetBookInfo(id, TITLE)) );
             ModifyBookInfo(id, "6666", TITLE);
@@ -137,11 +137,11 @@
 // -----------------------------------------------------
 
 
-// book_lent²âÊÔ´úÂë 
+// book_lentæµ‹è¯•ä»£ç  
 // -----------------------------------------------------
 void testBookLent()
 {
-    // ÉùÃ÷²âÊÔÊı¾İ±äÁ¿     
+    // å£°æ˜æµ‹è¯•æ•°æ®å˜é‡     
     int id1 = 100000002;
     int id2 = 200000033;
     int license1 = 149074999;
@@ -151,17 +151,17 @@ void testBookLent()
     tListStruct * pLentList = GetBookLentList();
     tListNode * pHeadLentNode = NULL;
     
-    // ²âÊÔ AddToBookLentList 
+    // æµ‹è¯• AddToBookLentList 
     AddToBookLentList(CreateLentPrototype(id1, license1, borrow_time));
     SetLentExpireTime(id1, time(NULL)+2592000);
     AddToBookLentList(CreateLentPrototype(id2, license2, borrow_time));
     SetLentExpireTime(id2, time(NULL)+2592000);
     pHeadLentNode = GetListHead(pLentList);
     
-    // ²âÊÔ GetLentId
+    // æµ‹è¯• GetLentId
     assert(GetLentId(pHeadLentNode) == id1);
     
-    // ²âÊÔ GetLentBookInfo 
+    // æµ‹è¯• GetLentBookInfo 
     assert(*((int*)GetLentBookInfo(id2, LICENSE)) == license2); 
 } 
 // -----------------------------------------------------

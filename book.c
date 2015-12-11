@@ -1,11 +1,11 @@
-/*******************************************************
+ï»¿/*******************************************************
  File name: book.c 
  
  Date: 2015.12.4
  
- Description: Í¼ÊéµÄ¿â´æĞÅÏ¢("Ã¿Ò»ÖÖÍ¼ÊéµÄ¿â´æĞÅÏ¢°üÀ¨±à
-    ºÅ¡¢ÊéÃû¡¢×÷Õß¡¢³ö°æÉç¡¢³ö°æÈÕÆÚ¡¢½ğ¶î¡¢Àà±ğ¡¢×ÜÈë¿â
-    ÊıÁ¿¡¢µ±Ç°¿â´æÁ¿¡¢ÒÑ½è³ö±¾ÊıµÈ¡£")
+ Description: å›¾ä¹¦çš„åº“å­˜ä¿¡æ¯("æ¯ä¸€ç§å›¾ä¹¦çš„åº“å­˜ä¿¡æ¯åŒ…æ‹¬ç¼–
+    å·ã€ä¹¦åã€ä½œè€…ã€å‡ºç‰ˆç¤¾ã€å‡ºç‰ˆæ—¥æœŸã€é‡‘é¢ã€ç±»åˆ«ã€æ€»å…¥åº“
+    æ•°é‡ã€å½“å‰åº“å­˜é‡ã€å·²å€Ÿå‡ºæœ¬æ•°ç­‰ã€‚")
     
  Dependency: list_node
 
@@ -22,14 +22,14 @@
 #define FLAG_POSITION 100000000
 
 /*
-// Í¼Êé¿â´æĞÅÏ¢ 
+// å›¾ä¹¦åº“å­˜ä¿¡æ¯ 
 typedef struct {
     int         total_number;
     int         current_number;
     int         lent_number;
 } stock_info;
 
-// Í¼ÊéĞÅÏ¢ 
+// å›¾ä¹¦ä¿¡æ¯ 
 typedef struct {
     int         id;
     char        isbn[MAX_STR]; 
@@ -44,13 +44,13 @@ typedef struct {
 } book_info;
 */
 
-// ÒªÇó°ÑÊé¼®¡¢ÆÚ¿¯¡¢±¨¿¯·ÖÀà¹ÜÀí£¬ÕâÑùµÄ»°²Ù×÷»á¸ü¼ÓÁé»îºÍ·½±ã£¬¿ÉÒÔËæÊ±¶ÔÆäÏà¹Ø×ÊÁÏ½øĞĞÌí¼Ó¡¢É¾³ı¡¢ĞŞ¸Ä¡¢²éÑ¯µÈ²Ù×÷¡£
+// è¦æ±‚æŠŠä¹¦ç±ã€æœŸåˆŠã€æŠ¥åˆŠåˆ†ç±»ç®¡ç†ï¼Œè¿™æ ·çš„è¯æ“ä½œä¼šæ›´åŠ çµæ´»å’Œæ–¹ä¾¿ï¼Œå¯ä»¥éšæ—¶å¯¹å…¶ç›¸å…³èµ„æ–™è¿›è¡Œæ·»åŠ ã€åˆ é™¤ã€ä¿®æ”¹ã€æŸ¥è¯¢ç­‰æ“ä½œã€‚
 
 tListStruct * bookList = NULL;
 tListStruct * periodicalsList = NULL;
 tListStruct * newspaperList = NULL;
 
-// ´´½¨Í¼ÊéĞÅÏ¢½á¹¹ 
+// åˆ›å»ºå›¾ä¹¦ä¿¡æ¯ç»“æ„ 
 book_info * CreateBookPrototype(char *isbn_, char *title_, char *author_, char *press_, 
     time_t time_, double price_, BookType type_)
 {
@@ -74,7 +74,7 @@ book_info * CreateBookPrototype(char *isbn_, char *title_, char *author_, char *
     return pBook;
 }
 
-// °´IDËÑË÷ 
+// æŒ‰IDæœç´¢ 
 static int SearchBookConditon(tListNode * pListNode,void * arg)
 {
     int * pId = (int*)arg;
@@ -87,7 +87,7 @@ static int SearchBookConditon(tListNode * pListNode,void * arg)
     return FAILURE;	       
 }
 
-// °´ISBNËÑË÷ 
+// æŒ‰ISBNæœç´¢ 
 static int SearchISBNConditon(tListNode * pListNode,void * arg)
 {
     char * pIsbn = (char*)arg;
@@ -100,7 +100,7 @@ static int SearchISBNConditon(tListNode * pListNode,void * arg)
     return FAILURE;
 }
 
-// »ñÈ¡Á´±í±íÊ¾µÄÍ¼ÊéÀàĞÍ 
+// è·å–é“¾è¡¨è¡¨ç¤ºçš„å›¾ä¹¦ç±»å‹ 
 static BookType GetListFlag(tListStruct * pList)
 {
     if (pList == bookList) {
@@ -117,18 +117,18 @@ static BookType GetListFlag(tListStruct * pList)
     }
 }
 
-// °´½ÚµãĞÅÏ¢»ñµÃËùÔÚÁ´±í 
+// æŒ‰èŠ‚ç‚¹ä¿¡æ¯è·å¾—æ‰€åœ¨é“¾è¡¨ 
 static tListStruct * GetListByNode(tListNode * pNode)
 {
     book_info * pBookInfo = (book_info*)(pNode->data);
     return GetListByType(pBookInfo->type);
 }
 
-// °´IDËÑË÷Í¼Êé½Úµã 
+// æŒ‰IDæœç´¢å›¾ä¹¦èŠ‚ç‚¹ 
 static tListNode * SearchBookById(int id)
 {
     tListStruct * pList = NULL;
-    switch((BookType)(id / FLAG_POSITION)) { // °´ID¼ÆËãÍ¼ÊéÀàĞÍ 
+    switch((BookType)(id / FLAG_POSITION)) { // æŒ‰IDè®¡ç®—å›¾ä¹¦ç±»å‹ 
     case BOOK:
         pList = bookList;
         break;
@@ -145,7 +145,7 @@ static tListNode * SearchBookById(int id)
     return pNode;
 }
 
-// ·µ»ØËùĞèÒªµÄÁ´±í
+// è¿”å›æ‰€éœ€è¦çš„é“¾è¡¨
 tListStruct * GetListByType(BookType type)
 {
     switch (type) {
@@ -160,7 +160,7 @@ tListStruct * GetListByType(BookType type)
     }
 }
 
-// °ÑÍ¼ÊéĞÅÏ¢½á¹¹¼ÓÈëÁ´±í 
+// æŠŠå›¾ä¹¦ä¿¡æ¯ç»“æ„åŠ å…¥é“¾è¡¨ 
 int AddToBooksList(book_info * pBookInfo)
 {
     tListStruct * pList = GetListByType(pBookInfo->type);
@@ -185,7 +185,7 @@ int AddToBooksList(book_info * pBookInfo)
     }
     pList = GetListByType(pBookInfo->type);
     
-    // ¼ì²é¿âÖĞÊÇ·ñÒÑÓĞ´ËÊé¼® 
+    // æ£€æŸ¥åº“ä¸­æ˜¯å¦å·²æœ‰æ­¤ä¹¦ç± 
     tListNode * pNode = SearchListNode(pList, SearchISBNConditon, pBookInfo->isbn);
     tListNode * pTailNode = GetListTail(pList);
 
@@ -194,11 +194,11 @@ int AddToBooksList(book_info * pBookInfo)
             pBookInfo->id = 1 + FLAG_POSITION * (int)GetListFlag(pList); 
         }
         else {
-            // Í¼ÊéIDÊ×Î»Êı±íÊ¾Í¼ÊéÀàĞÍ 
+            // å›¾ä¹¦IDé¦–ä½æ•°è¡¨ç¤ºå›¾ä¹¦ç±»å‹ 
             pBookInfo->id = ( (book_info*)(pTailNode->data) )->id + 1;
         }
         
-        // ĞŞ¸ÄÍ¼Êé¿â´æĞÅÏ¢ 
+        // ä¿®æ”¹å›¾ä¹¦åº“å­˜ä¿¡æ¯ 
         if (pNode != NULL) {
             stock_info *pStock = ( (book_info*)(pNode->data) )->stock;
             pBookInfo->stock = pStock;
@@ -217,7 +217,7 @@ int AddToBooksList(book_info * pBookInfo)
     return FAILURE;
 }
 
-// É¾³ıÍ¼Êé 
+// åˆ é™¤å›¾ä¹¦ 
 int RemoveBookById(int id)
 {
     tListNode * pNode = SearchBookById(id);
@@ -240,7 +240,7 @@ int RemoveBookById(int id)
     }
 }
 
-// ĞŞ¸ÄÍ¼ÊéĞÅÏ¢ 
+// ä¿®æ”¹å›¾ä¹¦ä¿¡æ¯ 
 int ModifyBookInfo(int id, void * arg, InfoFlag mFlag)
 {
     tListNode * pNode = SearchBookById(id);
@@ -252,7 +252,7 @@ int ModifyBookInfo(int id, void * arg, InfoFlag mFlag)
     BookType * pType = NULL;
     BookStatus * pStatus = NULL;
     
-    // °´InfoFlagÈ·¶¨ĞŞ¸ÄÏî 
+    // æŒ‰InfoFlagç¡®å®šä¿®æ”¹é¡¹ 
     switch (mFlag) {
     case ISBN:
         pChar = (char*)arg;
@@ -293,7 +293,7 @@ int ModifyBookInfo(int id, void * arg, InfoFlag mFlag)
     return SUCCESS;
 }
 
-// »ñÈ¡Í¼ÊéĞÅÏ¢ 
+// è·å–å›¾ä¹¦ä¿¡æ¯ 
 void * GetBookInfo(int id, InfoFlag gFlag)
 {
     tListNode * pNode = SearchBookById(id);
@@ -306,7 +306,7 @@ void * GetBookInfo(int id, InfoFlag gFlag)
     BookStatus * pStatus = NULL;
     stock_info * pStock = NULL;
     
-    // °´InfoFlagÈ·¶¨»ñÈ¡Ïî 
+    // æŒ‰InfoFlagç¡®å®šè·å–é¡¹ 
     switch (gFlag) {
     case ISBN:
         pChar = pBook->isbn;
@@ -337,7 +337,7 @@ void * GetBookInfo(int id, InfoFlag gFlag)
     }
 }
 
-// ·µ»ØÍ¼Êé½ÚµãID 
+// è¿”å›å›¾ä¹¦èŠ‚ç‚¹ID 
 int GetBookID(tListNode * pNode)
 {
     book_info * pBook = (book_info*)(pNode->data);

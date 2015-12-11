@@ -1,9 +1,9 @@
-/*******************************************************
+ï»¿/*******************************************************
  File name: account.c 
  Date: 2015.12.10
  
- Description: ËùÓĞÕË»§µÄĞÅÏ¢£¬°üÀ¨¶ÁÕßºÍ¹ÜÀíÔ±£¨Ã¿Ò»¸öÈË
-    µÄ½èÊéĞÅÏ¢°üÀ¨½èÊéÖ¤ºÅ¡¢ĞÕÃû¡¢°à¼¶¡¢Ñ§ºÅµÈ¡££© 
+ Description: æ‰€æœ‰è´¦æˆ·çš„ä¿¡æ¯ï¼ŒåŒ…æ‹¬è¯»è€…å’Œç®¡ç†å‘˜ï¼ˆæ¯ä¸€ä¸ªäºº
+    çš„å€Ÿä¹¦ä¿¡æ¯åŒ…æ‹¬å€Ÿä¹¦è¯å·ã€å§“åã€ç­çº§ã€å­¦å·ç­‰ã€‚ï¼‰ 
     
  Dependency: list_node
 
@@ -19,7 +19,7 @@
 
 tListStruct * accountList = NULL;
 
-// »ñµÃÕË»§Á´±í 
+// è·å¾—è´¦æˆ·é“¾è¡¨ 
 tListStruct * GetAccountList()
 {
     if (NULL == accountList) {
@@ -29,7 +29,7 @@ tListStruct * GetAccountList()
     return accountList;
 }
 
-// °´ÕËºÅËÑË÷Ìõ¼ş 
+// æŒ‰è´¦å·æœç´¢æ¡ä»¶ 
 static int SearchAccountConditon(tListNode * pListNode,void * arg)
 {
     int * pLicense = (int*)arg;
@@ -42,7 +42,7 @@ static int SearchAccountConditon(tListNode * pListNode,void * arg)
     return FAILURE;	  
 }
  
-// ÓÃÓÚ°´ÕË»§ºÅ²åÈëµÄÌõ¼ş
+// ç”¨äºæŒ‰è´¦æˆ·å·æ’å…¥çš„æ¡ä»¶
 static int AddAccountCondition(tListNode * pNode, tListNode * pAddNode, void * arg)
 {
     tListNode * pNodeNext = GetListNext(pNode);
@@ -55,7 +55,7 @@ static int AddAccountCondition(tListNode * pNode, tListNode * pAddNode, void * a
     account_info * accInfoNext = (account_info*)(pNodeNext->data);
     account_info * accInfoCurr = (account_info*)(pAddNode->data);
     
-    // °´ÕË»§ºÅÂëÅÅĞò¼ÓÈëÁ´±í 
+    // æŒ‰è´¦æˆ·å·ç æ’åºåŠ å…¥é“¾è¡¨ 
     if (accInfoPrev->license <= accInfoCurr->license 
         && accInfoCurr->license < accInfoNext->license) {
             return SUCCESS;
@@ -63,7 +63,7 @@ static int AddAccountCondition(tListNode * pNode, tListNode * pAddNode, void * a
     return FAILURE;
 }
 
-// °´ÕËºÅËÑË÷ÕË»§½Úµã 
+// æŒ‰è´¦å·æœç´¢è´¦æˆ·èŠ‚ç‚¹ 
 static tListNode * SearchAccountByLicense(int license)
 {
     tListStruct * pList = accountList;
@@ -71,7 +71,7 @@ static tListNode * SearchAccountByLicense(int license)
     return pNode;
 }
 
-// ½«ÕË»§ĞÅÏ¢²åÈëÁ´±í 
+// å°†è´¦æˆ·ä¿¡æ¯æ’å…¥é“¾è¡¨ 
 int AddToAccountList(account_info * pAcc)
 {
     tListStruct * pAccList = GetAccountList();
@@ -82,7 +82,7 @@ int AddToAccountList(account_info * pAcc)
     return AddListNode(pAccList, (void*)pAcc, AddAccountCondition, NULL);
 }
 
-// ×¢ÏúÒ»¸öÕË»§ 
+// æ³¨é”€ä¸€ä¸ªè´¦æˆ· 
 int RemoveAccountByLicense(int license)
 {
     tListNode * pNode = SearchAccountByLicense(license);
@@ -97,7 +97,7 @@ int RemoveAccountByLicense(int license)
     }
 }
 
-// ĞŞ¸ÄÕË»§ĞÅÏ¢ 
+// ä¿®æ”¹è´¦æˆ·ä¿¡æ¯ 
 int ModifyAccountInfo(int license, void * arg, AccountFlag mFlag)
 {
     tListNode * pNode = SearchAccountByLicense(license);
@@ -124,7 +124,7 @@ int ModifyAccountInfo(int license, void * arg, AccountFlag mFlag)
     return SUCCESS;
 }
 
-// »ñÈ¡ÕË»§ĞÅÏ¢ 
+// è·å–è´¦æˆ·ä¿¡æ¯ 
 void * GetAccountInfo(int license, AccountFlag gFlag)
 {
     tListNode * pNode = SearchAccountByLicense(license);

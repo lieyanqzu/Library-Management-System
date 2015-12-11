@@ -1,10 +1,10 @@
-/*******************************************************
+ï»¿/*******************************************************
  File name: account.h
  
  Date: 2015.12.10
  
- Description: ËùÓĞÕË»§µÄĞÅÏ¢£¬°üÀ¨¶ÁÕßºÍ¹ÜÀíÔ±£¨Ã¿Ò»¸öÈË
-    µÄ½èÊéĞÅÏ¢°üÀ¨½èÊéÖ¤ºÅ¡¢ĞÕÃû¡¢°à¼¶¡¢Ñ§ºÅµÈ¡££© 
+ Description: æ‰€æœ‰è´¦æˆ·çš„ä¿¡æ¯ï¼ŒåŒ…æ‹¬è¯»è€…å’Œç®¡ç†å‘˜ï¼ˆæ¯ä¸€ä¸ªäºº
+    çš„å€Ÿä¹¦ä¿¡æ¯åŒ…æ‹¬å€Ÿä¹¦è¯å·ã€å§“åã€ç­çº§ã€å­¦å·ç­‰ã€‚ï¼‰ 
     
  Dependency: list_node
 
@@ -20,14 +20,14 @@
 
 #define STR_LEN 32
 
-// ÓÃÓÚSetter/GetterÑ¡ÔñÊôĞÔ 
+// ç”¨äºSetter/Getteré€‰æ‹©å±æ€§ 
 typedef enum {
     NAME = 0, 
     CLASSES = 1, 
     RANK = 2,  
 } AccountFlag;
 
-// ÓÃ»§µÄÀà±ğ 
+// ç”¨æˆ·çš„ç±»åˆ« 
 typedef enum {
     STUDENT = 0, 
     TEACHER = 1, 
@@ -35,7 +35,7 @@ typedef enum {
     LOSS = 3, 
 } AccountRank;
 
-// ÕË»§ĞÅÏ¢ 
+// è´¦æˆ·ä¿¡æ¯ 
 typedef struct {
     int             license;
     char            name[STR_LEN];
@@ -43,28 +43,28 @@ typedef struct {
     AccountRank     rank;
 } account_info;
 
-// »ñµÃÕË»§Á´±í 
+// è·å¾—è´¦æˆ·é“¾è¡¨ 
 tListStruct * GetAccountList(); 
 
-// °´ÕËºÅËÑË÷Ìõ¼ş 
+// æŒ‰è´¦å·æœç´¢æ¡ä»¶ 
 static int SearchAccountConditon(tListNode * pListNode,void * arg);
 
-// ÓÃÓÚ°´ÕË»§ºÅ²åÈëµÄÌõ¼ş
+// ç”¨äºæŒ‰è´¦æˆ·å·æ’å…¥çš„æ¡ä»¶
 static int AddAccountCondition(tListNode * pNode, tListNode * pAddNode, void * arg);
 
-// °´ÕËºÅËÑË÷ÕË»§½Úµã 
+// æŒ‰è´¦å·æœç´¢è´¦æˆ·èŠ‚ç‚¹ 
 static tListNode * SearchAccountByLicense(int license);
 
-// ½«ÕË»§ĞÅÏ¢²åÈëÁ´±í 
+// å°†è´¦æˆ·ä¿¡æ¯æ’å…¥é“¾è¡¨ 
 int AddToAccountList(account_info * pAcc);
 
-// ×¢ÏúÒ»¸öÕË»§ 
+// æ³¨é”€ä¸€ä¸ªè´¦æˆ· 
 int RemoveAccountByLicense(int license);
 
-// ĞŞ¸ÄÕË»§ĞÅÏ¢ 
+// ä¿®æ”¹è´¦æˆ·ä¿¡æ¯ 
 int ModifyAccountInfo(int license, void * arg, AccountFlag mFlag);
 
-// »ñÈ¡ÕË»§ĞÅÏ¢ 
+// è·å–è´¦æˆ·ä¿¡æ¯ 
 void * GetAccountInfo(int id, AccountFlag gFlag); 
  
 #endif
