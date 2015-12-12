@@ -17,6 +17,16 @@
 
 #include "account.h"
 
+/*
+// 账户信息
+typedef struct {
+    int             license;
+    char            name[STR_LEN];
+    char            classes[STR_LEN];
+    AccountRank     rank;
+} account_info;
+*/
+
 tListStruct * accountList = NULL;
 
 // 获得账户链表 
@@ -29,11 +39,23 @@ tListStruct * GetAccountList()
     return accountList;
 }
 
+// 建立账户信息原型
+account_info * CreateAccountPrototype(int license_, char *name_, char *classes_, AccountRank rank_)
+{
+    account_info * pAcc = (account_info*)malloc(sizeof(account_info));
+
+    pAcc->license = license_;
+    strncpy(pAcc->name, name_, STR_LEN);
+    strncpy(pAcc->classes, classes_, STR_LEN);
+    pAcc->rank = rank_;
+
+    return pAcc;
+}
+
 // 按账号搜索条件 
-static int SearchAccountConditon(tListNode * pListNode,void * arg)
+static int SearchAccountCondition(tListNode *pNode, void *arg)
 {
     int * pLicense = (int*)arg;
-    tListNode *pNode = (tListNode *)pListNode;
     
     if (( (account_info*)(pNode->data) )->license == *pLicense) {
         return SUCCESS;
@@ -67,18 +89,31 @@ static int AddAccountCondition(tListNode * pNode, tListNode * pAddNode, void * a
 static tListNode * SearchAccountByLicense(int license)
 {
     tListStruct * pList = accountList;
-    tListNode * pNode = SearchListNode(pList, SearchAccountConditon, &license);
+    tListNode * pNode = SearchListNode(pList, SearchAccountCondition, &license);
     return pNode;
+}
+
+// 返回节点的账户号
+static int GetLicenseByNode(tListNode * pNode)
+{
+    account_info * pAcc = (account_info*)(pNode->data);
+    return pAcc->license;
 }
 
 // 将账户信息插入链表 
 int AddToAccountList(account_info * pAcc)
 {
     tListStruct * pAccList = GetAccountList();
+    tListNode * pHeadNode = GetListHead(pAccList);
     if (NULL == pAccList) {
         return FAILURE;
     }
-    
+
+    if (NULL == GetListHead(pAccList) ||
+            GetLicenseByNode(pHeadNode) > pAcc->license) {
+        return AddListNodeToHead(pAccList, (void*)pAcc);
+    }
+
     return AddListNode(pAccList, (void*)pAcc, AddAccountCondition, NULL);
 }
 
@@ -147,4 +182,3 @@ void * GetAccountInfo(int license, AccountFlag gFlag)
         return NULL; 
     }
 }
-

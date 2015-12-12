@@ -21,8 +21,8 @@
 
 #include "list_node.h"
 
-#define MAX_STR 128
-#define ISBN_LEN 13
+#define MAX_STR 64
+#define ISBN_LEN 14
 
 // 图书类型分类 
 typedef enum {
@@ -78,10 +78,10 @@ book_info * CreateBookPrototype(char *isbn, char *title_, char *author_, char *p
     time_t time_, double price_, BookType type_);
 
 // 按ID搜索 
-static int SearchBookConditon(tListNode * pListNode,void * arg);
+static int SearchBookCondition(tListNode *pListNode, void *arg);
 
 // 按ISBN搜索 
-static int SearchISBNConditon(tListNode * pListNode,void * arg);
+static int SearchISBNCondition(tListNode *pListNode, void *arg);
 
 // 获取链表表示的图书类型 
 static BookType GetListFlag(tListStruct * pList);

@@ -20,7 +20,7 @@
 
 // 链表节点原型声明 
 typedef struct ListNode {
-    void 			*data; // 以不定数据类型定义data 
+    void 			*data; // 以不定数据类型定义data
     struct ListNode *next;
 } tListNode;
 
@@ -39,18 +39,18 @@ int DeleteList(tListStruct *pListStruct,
     void DeepDelete(tListNode * pNode, void * args), void * args);
 
 // 增加链表节点至链表尾部[，可选按条件插入节点] 
-int AddListNode(tListStruct *pListStruct, void *pdata, 
-	int Conditon(tListNode * pNode, tListNode * pAddNode, void * args), void * args);
+int AddListNode(tListStruct *pListStruct, void *pData,
+                int Condition(tListNode * pNode, tListNode * pAddNode, void * args), void * args);
 
 // 增加链表节点使之成为链表头部 
-int AddListNodeToHead(tListStruct *pListStruct, void *pdata);
+int AddListNodeToHead(tListStruct *pListStruct, void *pData);
 
 // 删除链表中某一节点 
 int DeleteListNode(tListStruct *pListStruct, tListNode *pNode);
 
 // 按条件搜索节点 
-tListNode * SearchListNode(tListStruct *pListStruct, 
-    int Conditon(tListNode * pNode, void * args), void * args);
+tListNode * SearchListNode(tListStruct *pListStruct,
+    int Condition(tListNode * pNode, void * args), void * args);
     
 // 返回链表的头节点 
 tListNode * GetListHead(tListStruct *pListStruct);

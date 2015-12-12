@@ -39,7 +39,7 @@ typedef struct {
 } book_lent_info;
 
 // 按ID搜索已借出图书
-static int SearchLentBookConditon(tListNode * pListNode,void * arg);
+static int SearchLentBookCondition(tListNode *pListNode, void *arg);
 
 // 通过ID得到book_lent_info 
 static book_lent_info * GetLentInfoById(int id); 

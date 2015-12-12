@@ -75,10 +75,9 @@ book_info * CreateBookPrototype(char *isbn_, char *title_, char *author_, char *
 }
 
 // 按ID搜索 
-static int SearchBookConditon(tListNode * pListNode,void * arg)
+static int SearchBookCondition(tListNode *pNode, void *arg)
 {
     int * pId = (int*)arg;
-    tListNode *pNode = (tListNode *)pListNode;
     
     if (( (book_info*)(pNode->data) )->id == *pId) {
         return SUCCESS;
@@ -88,10 +87,9 @@ static int SearchBookConditon(tListNode * pListNode,void * arg)
 }
 
 // 按ISBN搜索 
-static int SearchISBNConditon(tListNode * pListNode,void * arg)
+static int SearchISBNCondition(tListNode *pNode, void *arg)
 {
     char * pIsbn = (char*)arg;
-    tListNode *pNode = (tListNode*)pListNode;
     
     if (strcmp( ((book_info*)(pNode->data))->isbn, pIsbn ) == 0) {
         return SUCCESS;
@@ -141,7 +139,7 @@ static tListNode * SearchBookById(int id)
     default:
         return NULL;            
     }
-    tListNode * pNode = SearchListNode(pList, SearchBookConditon, &id);
+    tListNode * pNode = SearchListNode(pList, SearchBookCondition, &id);
     return pNode;
 }
 
@@ -186,7 +184,7 @@ int AddToBooksList(book_info * pBookInfo)
     pList = GetListByType(pBookInfo->type);
     
     // 检查库中是否已有此书籍 
-    tListNode * pNode = SearchListNode(pList, SearchISBNConditon, pBookInfo->isbn);
+    tListNode * pNode = SearchListNode(pList, SearchISBNCondition, pBookInfo->isbn);
     tListNode * pTailNode = GetListTail(pList);
 
     if (AddListNode(pList, pBookInfo, NULL, NULL) == SUCCESS) {
@@ -302,7 +300,6 @@ void * GetBookInfo(int id, InfoFlag gFlag)
     char * pChar = NULL;
     time_t * pTime = NULL;
     double * pDouble = NULL;
-    BookType * pType = NULL;
     BookStatus * pStatus = NULL;
     stock_info * pStock = NULL;
     

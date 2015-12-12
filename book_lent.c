@@ -34,10 +34,9 @@ typedef struct {
 tListStruct * bookLentList = NULL;
 
 // 按ID搜索已借出图书
-static int SearchLentBookConditon(tListNode * pListNode, void * arg)
+static int SearchLentBookCondition(tListNode *pNode, void *arg)
 {
     int * pId = (int*)arg;
-    tListNode *pNode = (tListNode *)pListNode;
     
     if (( (book_lent_info*)(pNode->data) )->id == *pId) {
         return SUCCESS;
@@ -93,7 +92,7 @@ int AddToBookLentList(book_lent_info * pLentBook)
 // 通过ID搜索已借出图书节点 
 tListNode * SearchLentBookById(int id)
 {
-    return SearchListNode(bookLentList, SearchLentBookConditon, &id);
+    return SearchListNode(bookLentList, SearchLentBookCondition, &id);
 }
 
 // 删除一本已借出图书信息 

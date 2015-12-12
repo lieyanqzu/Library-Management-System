@@ -76,18 +76,18 @@ int DeleteList(tListStruct *pListStruct,
 }
 
 // 增加链表节点至链表尾部[，可选按条件插入节点] 
-int AddListNode(tListStruct *pListStruct, void *pdata, 
-	int Conditon(tListNode * pNode, tListNode * pAddNode, void * args), void * args)
+int AddListNode(tListStruct *pListStruct, void *pData,
+	int Condition(tListNode * pNode, tListNode * pAddNode, void * args), void * args)
 {
 	if (NULL == pListStruct) {
 		return FAILURE;
 	}
 	
 	tListNode *node = (tListNode*)malloc(sizeof(tListNode));
-	node->data = pdata;
+	node->data = pData;
 	node->next = NULL;
 	
-	if (NULL == Conditon) {
+	if (NULL == Condition) {
 	    // 未提供添加条件时插入链表尾部 
     	if (NULL == pListStruct->head) {
     		pListStruct->head = node;
@@ -109,7 +109,7 @@ int AddListNode(tListStruct *pListStruct, void *pdata,
         // 提供添加条件时按条件搜索并插入 
     	tListNode *tempNode = pListStruct->head;
     	while (tempNode != NULL) {
-    		if (Conditon(tempNode, node, args) == SUCCESS) {
+    		if (Condition(tempNode, node, args) == SUCCESS) {
     			node->next = tempNode->next;
     			tempNode->next = node;
     			pListStruct->length += 1;
@@ -122,18 +122,18 @@ int AddListNode(tListStruct *pListStruct, void *pdata,
 }
 
 // 增加链表节点使之成为链表头部 
-int AddListNodeToHead(tListStruct *pListStruct, void *pdata)
+int AddListNodeToHead(tListStruct *pListStruct, void *pData)
 {
     if (NULL == pListStruct) {
 		return FAILURE;
 	}
 	
 	tListNode *node = (tListNode*)malloc(sizeof(tListNode));
-	node->data = pdata;
+	node->data = pData;
 	node->next = NULL;
 	
 	if (NULL == pListStruct->head) {
-		AddListNode(pListStruct, pdata, NULL, NULL);
+		AddListNode(pListStruct, pData, NULL, NULL);
     }
     else {
         tListNode * pHead = pListStruct->head;
@@ -177,15 +177,15 @@ int DeleteListNode(tListStruct *pListStruct, tListNode *pNode)
 }
 
 // 按条件搜索节点 
-tListNode * SearchListNode(tListStruct *pListStruct, 
-	int Conditon(tListNode * pNode, void * args), void * args)
+tListNode * SearchListNode(tListStruct *pListStruct,
+	int Condition(tListNode * pNode, void * args), void * args)
 {
-	if (NULL == pListStruct || NULL == Conditon) {
+	if (NULL == pListStruct || NULL == Condition) {
 		return NULL;
 	}
 	tListNode *tempNode = pListStruct->head;
 	while (tempNode != NULL) {
-		if (Conditon(tempNode, args) == SUCCESS) {
+		if (Condition(tempNode, args) == SUCCESS) {
 			return tempNode;
 		}
 		tempNode = tempNode->next;

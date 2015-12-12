@@ -22,4 +22,7 @@ void testBook();
 // book_lent测试代码 
 void testBookLent();
 
+// account测试代码
+void testAccount();
+
 #endif

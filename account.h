@@ -44,16 +44,22 @@ typedef struct {
 } account_info;
 
 // 获得账户链表 
-tListStruct * GetAccountList(); 
+tListStruct * GetAccountList();
+
+// 建立账户信息原型
+account_info * CreateAccountPrototype(int license_, char *name_, char *classes_, AccountRank rank_);
 
 // 按账号搜索条件 
-static int SearchAccountConditon(tListNode * pListNode,void * arg);
+static int SearchAccountCondition(tListNode *pListNode, void *arg);
 
 // 用于按账户号插入的条件
 static int AddAccountCondition(tListNode * pNode, tListNode * pAddNode, void * arg);
 
 // 按账号搜索账户节点 
 static tListNode * SearchAccountByLicense(int license);
+
+// 返回节点的账户号
+static int GetLicenseByNode(tListNode * pNode);
 
 // 将账户信息插入链表 
 int AddToAccountList(account_info * pAcc);
@@ -65,6 +71,6 @@ int RemoveAccountByLicense(int license);
 int ModifyAccountInfo(int license, void * arg, AccountFlag mFlag);
 
 // 获取账户信息 
-void * GetAccountInfo(int id, AccountFlag gFlag); 
+void * GetAccountInfo(int license, AccountFlag gFlag);
  
 #endif
