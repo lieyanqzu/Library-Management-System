@@ -1,10 +1,10 @@
-ï»¿/*******************************************************
+/*******************************************************
  File name: account.h
  
  Date: 2015.12.10
  
- Description: æ‰€æœ‰è´¦æˆ·çš„ä¿¡æ¯ï¼ŒåŒ…æ‹¬è¯»è€…å’Œç®¡ç†å‘˜ï¼ˆæ¯ä¸€ä¸ªäºº
-    çš„å€Ÿä¹¦ä¿¡æ¯åŒ…æ‹¬å€Ÿä¹¦è¯å·ã€å§“åã€ç­çº§ã€å­¦å·ç­‰ã€‚ï¼‰ 
+ Description: ËùÓĞÕË»§µÄĞÅÏ¢£¬°üÀ¨¶ÁÕßºÍ¹ÜÀíÔ±£¨Ã¿Ò»¸öÈË
+    µÄ½èÊéĞÅÏ¢°üÀ¨½èÊéÖ¤ºÅ¡¢ĞÕÃû¡¢°à¼¶¡¢Ñ§ºÅµÈ¡££© 
     
  Dependency: list_node
 
@@ -19,15 +19,17 @@
 #include "list_node.h"
 
 #define STR_LEN 32
+#define PW_LEN 17
 
-// ç”¨äºSetter/Getteré€‰æ‹©å±æ€§ 
+// ÓÃÓÚSetter/GetterÑ¡ÔñÊôĞÔ 
 typedef enum {
-    NAME = 0, 
-    CLASSES = 1, 
-    RANK = 2,  
+    PASSWORD = 0,
+    NAME = 1,
+    CLASSES = 2,
+    RANK = 3,
 } AccountFlag;
 
-// ç”¨æˆ·çš„ç±»åˆ« 
+// ÓÃ»§µÄÀà±ğ 
 typedef enum {
     STUDENT = 0, 
     TEACHER = 1, 
@@ -35,42 +37,44 @@ typedef enum {
     LOSS = 3, 
 } AccountRank;
 
-// è´¦æˆ·ä¿¡æ¯ 
+// ÕË»§ĞÅÏ¢ 
 typedef struct {
     int             license;
+    char            password[PW_LEN];
     char            name[STR_LEN];
     char            classes[STR_LEN];
     AccountRank     rank;
 } account_info;
 
-// è·å¾—è´¦æˆ·é“¾è¡¨ 
+// »ñµÃÕË»§Á´±í 
 tListStruct * GetAccountList();
 
-// å»ºç«‹è´¦æˆ·ä¿¡æ¯åŸå‹
+// ½¨Á¢ÕË»§ĞÅÏ¢Ô­ĞÍ
 account_info * CreateAccountPrototype(int license_, char *name_, char *classes_, AccountRank rank_);
 
-// æŒ‰è´¦å·æœç´¢æ¡ä»¶ 
+// °´ÕËºÅËÑË÷Ìõ¼ş 
 static int SearchAccountCondition(tListNode *pListNode, void *arg);
 
-// ç”¨äºæŒ‰è´¦æˆ·å·æ’å…¥çš„æ¡ä»¶
+// ÓÃÓÚ°´ÕË»§ºÅ²åÈëµÄÌõ¼ş
 static int AddAccountCondition(tListNode * pNode, tListNode * pAddNode, void * arg);
 
-// æŒ‰è´¦å·æœç´¢è´¦æˆ·èŠ‚ç‚¹ 
-static tListNode * SearchAccountByLicense(int license);
+// °´ÕËºÅËÑË÷ÕË»§½Úµã 
+tListNode * SearchAccountByLicense(int license);
 
-// è¿”å›èŠ‚ç‚¹çš„è´¦æˆ·å·
-static int GetLicenseByNode(tListNode * pNode);
+// ·µ»Ø½ÚµãµÄÕË»§ºÅ
+int GetLicenseByNode(tListNode * pNode);
 
-// å°†è´¦æˆ·ä¿¡æ¯æ’å…¥é“¾è¡¨ 
+// ½«ÕË»§ĞÅÏ¢²åÈëÁ´±í 
 int AddToAccountList(account_info * pAcc);
 
-// æ³¨é”€ä¸€ä¸ªè´¦æˆ· 
+// ×¢ÏúÒ»¸öÕË»§ 
 int RemoveAccountByLicense(int license);
 
-// ä¿®æ”¹è´¦æˆ·ä¿¡æ¯ 
+// ĞŞ¸ÄÕË»§ĞÅÏ¢ 
 int ModifyAccountInfo(int license, void * arg, AccountFlag mFlag);
 
-// è·å–è´¦æˆ·ä¿¡æ¯ 
+// »ñÈ¡ÕË»§ĞÅÏ¢ 
 void * GetAccountInfo(int license, AccountFlag gFlag);
  
 #endif
+

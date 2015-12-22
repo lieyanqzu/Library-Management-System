@@ -1,11 +1,11 @@
-ï»¿/*******************************************************
+/*******************************************************
  File name: book_lent.c
  
  Date: 2015.12.7
  
- Description: å·²å€Ÿå‡ºå›¾ä¹¦çš„ä¿¡æ¯("æ¯ä¸€æœ¬è¢«å€Ÿé˜…çš„ä¹¦éƒ½åŒ…æ‹¬å¦‚
-    ä¸‹ä¿¡æ¯ï¼šç¼–å·ã€ä¹¦åã€é‡‘é¢ã€å€Ÿä¹¦è¯å·ã€å€Ÿä¹¦æ—¥æœŸã€åˆ°æœŸæ—¥
-    æœŸã€ç½šæ¬¾é‡‘é¢ç­‰ã€‚")
+ Description: ÒÑ½è³öÍ¼ÊéµÄÐÅÏ¢("Ã¿Ò»±¾±»½èÔÄµÄÊé¶¼°üÀ¨Èç
+    ÏÂÐÅÏ¢£º±àºÅ¡¢ÊéÃû¡¢½ð¶î¡¢½èÊéÖ¤ºÅ¡¢½èÊéÈÕÆÚ¡¢µ½ÆÚÈÕ
+    ÆÚ¡¢·£¿î½ð¶îµÈ¡£")
     
  Dependency: list_node
 
@@ -20,7 +20,7 @@
 #include "book_lent.h"
 
 /*
-// å·²å€Ÿå‡ºå›¾ä¹¦ä¿¡æ¯ 
+// ÒÑ½è³öÍ¼ÊéÐÅÏ¢ 
 typedef struct {
     int     id;
     int     license;
@@ -30,10 +30,10 @@ typedef struct {
 } book_lent_info;
 */
 
-// å·²å€Ÿå‡ºå›¾ä¹¦é“¾è¡¨ 
+// ÒÑ½è³öÍ¼ÊéÁ´±í 
 tListStruct * bookLentList = NULL;
 
-// æŒ‰IDæœç´¢å·²å€Ÿå‡ºå›¾ä¹¦
+// °´IDËÑË÷ÒÑ½è³öÍ¼Êé
 static int SearchLentBookCondition(tListNode *pNode, void *arg)
 {
     int * pId = (int*)arg;
@@ -45,7 +45,7 @@ static int SearchLentBookCondition(tListNode *pNode, void *arg)
     return FAILURE;	       
 }
 
-// é€šè¿‡IDå¾—åˆ°book_lent_info 
+// Í¨¹ýIDµÃµ½book_lent_info 
 static book_lent_info * GetLentInfoById(int id)
 {
     tListNode * pNode = SearchLentBookById(id);
@@ -54,7 +54,7 @@ static book_lent_info * GetLentInfoById(int id)
     return pLent;
 }
 
-// è¿”å›žbook_lent_infoç»“æž„ 
+// ·µ»Øbook_lent_info½á¹¹ 
 book_lent_info * CreateLentPrototype(int id_, int license_, time_t borrow_time_)
 {
     book_lent_info * pLentBook = (book_lent_info*)malloc(sizeof(book_lent_info));
@@ -68,7 +68,7 @@ book_lent_info * CreateLentPrototype(int id_, int license_, time_t borrow_time_)
     return pLentBook;
 }
 
-// è¿”å›žå·²å€Ÿå‡ºå›¾ä¹¦é“¾è¡¨ 
+// ·µ»ØÒÑ½è³öÍ¼ÊéÁ´±í 
 tListStruct * GetBookLentList() 
 {
     if (NULL == bookLentList) {
@@ -78,7 +78,7 @@ tListStruct * GetBookLentList()
     return bookLentList;
 }
 
-// åŠ å…¥æ–°çš„å·²å€Ÿå‡ºæ•°æ®è‡³é“¾è¡¨ 
+// ¼ÓÈëÐÂµÄÒÑ½è³öÊý¾ÝÖÁÁ´±í 
 int AddToBookLentList(book_lent_info * pLentBook)
 {
     tListStruct * pLentList = GetBookLentList();
@@ -89,13 +89,13 @@ int AddToBookLentList(book_lent_info * pLentBook)
     return AddListNode(pLentList, (void*)pLentBook, NULL, NULL);
 }
 
-// é€šè¿‡IDæœç´¢å·²å€Ÿå‡ºå›¾ä¹¦èŠ‚ç‚¹ 
+// Í¨¹ýIDËÑË÷ÒÑ½è³öÍ¼Êé½Úµã 
 tListNode * SearchLentBookById(int id)
 {
     return SearchListNode(bookLentList, SearchLentBookCondition, &id);
 }
 
-// åˆ é™¤ä¸€æœ¬å·²å€Ÿå‡ºå›¾ä¹¦ä¿¡æ¯ 
+// É¾³ýÒ»±¾ÒÑ½è³öÍ¼ÊéÐÅÏ¢ 
 int RemoveLentBook(int id)
 {
     tListNode * pLentNode = SearchLentBookById(id);
@@ -109,14 +109,14 @@ int RemoveLentBook(int id)
     return FAILURE;
 }
 
-// è¿”å›žèŠ‚ç‚¹æ‰€æŒ‡å‘çš„å›¾ä¹¦ID 
+// ·µ»Ø½ÚµãËùÖ¸ÏòµÄÍ¼ÊéID 
 int GetLentId(tListNode * pNode)
 {
     book_lent_info * pLent = (book_lent_info*)(pNode->data);
     return pLent->id;
 }
 
-// ä¿®æ”¹å›¾ä¹¦è¿‡æœŸæ—¶é—´ 
+// ÐÞ¸ÄÍ¼Êé¹ýÆÚÊ±¼ä 
 int SetLentExpireTime(int id, time_t expire_time_)
 {
     book_lent_info * pLent = GetLentInfoById(id);
@@ -125,7 +125,7 @@ int SetLentExpireTime(int id, time_t expire_time_)
     return SUCCESS;
 }
 
-// ä¿®æ”¹å›¾ä¹¦ç½šé‡‘ 
+// ÐÞ¸ÄÍ¼Êé·£½ð 
 int SetLentFine(int id, double fine_)
 {
     book_lent_info * pLent = GetLentInfoById(id);
@@ -134,12 +134,12 @@ int SetLentFine(int id, double fine_)
     return SUCCESS;
 }
 
-// è¿”å›žå·²å€Ÿå‡ºçš„å›¾ä¹¦çš„ä¿¡æ¯é¡¹ 
+// ·µ»ØÒÑ½è³öµÄÍ¼ÊéµÄÐÅÏ¢Ïî 
 void * GetLentBookInfo(int id, LentInfoFlag sFlag)
 {
     book_lent_info * pLent = GetLentInfoById(id);
     
-    // æŒ‰InfoFlagè¿”å›žéœ€è¦çš„ä¿¡æ¯é¡¹ 
+    // °´InfoFlag·µ»ØÐèÒªµÄÐÅÏ¢Ïî 
     switch (sFlag) {
     case LICENSE:
         return (void*) (&(pLent->license));
@@ -152,5 +152,12 @@ void * GetLentBookInfo(int id, LentInfoFlag sFlag)
     default:
         return NULL;
     } 
+}
+
+int DeleteBookLentListCondition(tListNode *pNode, void *arg)
+{
+    book_lent_info *pLent = (book_lent_info*)(pNode->data);
+    free(pLent);
+    return SUCCESS;
 }
 

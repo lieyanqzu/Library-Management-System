@@ -1,14 +1,14 @@
-ï»¿/*******************************************************
+/*******************************************************
  File name: unit_test.c
  
  Date: 2015.12.5
  
- Description: å•å…ƒæµ‹è¯•ä»£ç  
+ Description: µ¥Ôª²âÊÔ´úÂë 
  
  target: list_node, book, book_lent, account
 
- History: 2015.12.7 å¢åŠ  book_lent test
-    2015.12.12 å¢åŠ  account test
+ History: 2015.12.7 Ôö¼Ó book_lent test
+    2015.12.12 Ôö¼Ó account test
  
 ********************************************************/
 
@@ -26,14 +26,14 @@
 #include "book_lent.h"
 #include "account.h"
 
-// list_nodeæµ‹è¯•ä»£ç  
+// list_node²âÊÔ´úÂë 
 // -----------------------------------------------------
-    // å®šä¹‰æµ‹è¯•ç”¨æ•°æ® 
+    // ¶¨Òå²âÊÔÓÃÊı¾İ 
     typedef struct simple {
         int data;
     } tSimple;
     
-    // list_nodeæµ‹è¯•ç”¨ä¾‹æœç´¢æ¡ä»¶ 
+    // list_node²âÊÔÓÃÀıËÑË÷Ìõ¼ş 
     static int SearchSimpleCondition(tListNode *pNode, void *arg)
     {
         int * pData = (int*)arg;
@@ -50,7 +50,7 @@
         tListStruct * list = CreateList();
         int i;
         
-        // å‡†å¤‡æµ‹è¯•ç”¨ä¾‹ 
+        // ×¼±¸²âÊÔÓÃÀı 
         int testArray[4] = {3, 4, 5, 6};
         tSimple testSimple[4];
         
@@ -71,18 +71,18 @@
         node = headNode = GetListHead(list);
         tailNode = GetListTail(list);
         
-        // æµ‹è¯• AddListNode
+        // ²âÊÔ AddListNode
         for (i = 0; i < 4; i++) {
 //            printf("%d  ", ( (tSimple*)(node->data) )->data);
             assert(( (tSimple*)(node->data) )->data == testArray[i]);
             node = node->next;
         }
         
-        // æµ‹è¯• SearchListNode
+        // ²âÊÔ SearchListNode
         assert(SearchListNode(list, SearchSimpleCondition, (void *) &testArray[0]) == headNode);
         assert(SearchListNode(list, SearchSimpleCondition, (void *) &testArray[3]) == tailNode);
         
-        // æµ‹è¯• DeleteListNode
+        // ²âÊÔ DeleteListNode
         if (DeleteListNode(list, headNode) == SUCCESS) {
             tListNode * newHead = GetListHead(list);
             assert(( (tSimple*)(newHead->data) )->data == testArray[1]);
@@ -93,16 +93,16 @@
 // -----------------------------------------------------
 
 
-// bookæµ‹è¯•ä»£ç  
+// book²âÊÔ´úÂë 
 // -----------------------------------------------------
     void testBook()
     {
-        // å£°æ˜æµ‹è¯•æ•°æ®
+        // ÉùÃ÷²âÊÔÊı¾İ
         int         id;
         char        isbn[3][ISBN_LEN] = {"9787111135104", "9787115357618", "9787115369093", };
-        char        title[3][MAX_STR] = {"è®¡ç®—æœºç¨‹åºçš„æ„é€ å’Œè§£é‡Š", "ç¼–ç¨‹ç ç‘", "é‡æ„ æ”¹å–„æ—¢æœ‰ä»£ç çš„è®¾è®¡", };
-        char        author[3][MAX_STR] = {"è‰¾ä¼¯æ£®", "ä¹”æ©Â·æœ¬ç‰¹åˆ©", "Martin Fowler"};
-        char        press[3][MAX_STR] = {"æœºæ¢°å·¥ä¸šå‡ºç‰ˆç¤¾", "äººæ°‘é‚®ç”µå‡ºç‰ˆç¤¾", "äººæ°‘é‚®ç”µå‡ºç‰ˆç¤¾", };
+        char        title[3][MAX_STR] = {"¼ÆËã»ú³ÌĞòµÄ¹¹ÔìºÍ½âÊÍ", "±à³ÌÖéçá", "ÖØ¹¹ ¸ÄÉÆ¼ÈÓĞ´úÂëµÄÉè¼Æ", };
+        char        author[3][MAX_STR] = {"°¬²®É­", "ÇÇ¶÷¡¤±¾ÌØÀû", "Martin Fowler"};
+        char        press[3][MAX_STR] = {"»úĞµ¹¤Òµ³ö°æÉç", "ÈËÃñÓÊµç³ö°æÉç", "ÈËÃñÓÊµç³ö°æÉç", };
         time_t      public_time = time(NULL);
         double      price[3] = {45.0, 39.0, 69.0};
 
@@ -114,28 +114,28 @@
             dType = i+1;
             type = (BookType)dType;
 
-            // æµ‹è¯• CreateBookPrototype
+            // ²âÊÔ CreateBookPrototype
             book_info * pBook = CreateBookPrototype(isbn[i], title[i], author[i], press[i], public_time, price[i], type);
 
-            // æµ‹è¯• AddToBooksList
+            // ²âÊÔ AddToBooksList
             id = AddToBooksList(pBook);
 
-            // æµ‹è¯•å±æ€§Getter/Setter
+            // ²âÊÔÊôĞÔGetter/Setter
             assert(strcmp( (char*)GetBookInfo(id, TITLE), title[i]) == 0);
 //            printf("%s\n", ((char*)GetBookInfo(id, TITLE)) );
-            ModifyBookInfo(id, "ä»£ç æ•´æ´ä¹‹é“", TITLE);
-            assert(strcmp( (char*)GetBookInfo(id, TITLE), "ä»£ç æ•´æ´ä¹‹é“") == 0);
+            ModifyBookInfo(id, "´úÂëÕû½àÖ®µÀ", TITLE);
+            assert(strcmp( (char*)GetBookInfo(id, TITLE), "´úÂëÕû½àÖ®µÀ") == 0);
 //            printf("%s\n", ((char*)GetBookInfo(id, TITLE)) );
         }
     }
 // -----------------------------------------------------
 
 
-// book_lentæµ‹è¯•ä»£ç  
+// book_lent²âÊÔ´úÂë 
 // -----------------------------------------------------
     void testBookLent()
     {
-        // å£°æ˜æµ‹è¯•æ•°æ®
+        // ÉùÃ÷²âÊÔÊı¾İ
         int id1 = 100000002;
         int id2 = 200000033;
         int license1 = 149074999;
@@ -145,30 +145,30 @@
         tListStruct * pLentList = GetBookLentList();
         tListNode * pHeadLentNode = NULL;
 
-        // æµ‹è¯• AddToBookLentList
+        // ²âÊÔ AddToBookLentList
         AddToBookLentList(CreateLentPrototype(id1, license1, borrow_time));
         SetLentExpireTime(id1, time(NULL)+2592000);
         AddToBookLentList(CreateLentPrototype(id2, license2, borrow_time));
         SetLentExpireTime(id2, time(NULL)+2592000);
         pHeadLentNode = GetListHead(pLentList);
 
-        // æµ‹è¯• GetLentId
+        // ²âÊÔ GetLentId
         assert(GetLentId(pHeadLentNode) == id1);
 
-        // æµ‹è¯• GetLentBookInfo
+        // ²âÊÔ GetLentBookInfo
         assert(*((int*)GetLentBookInfo(id2, LICENSE)) == license2);
     }
 // -----------------------------------------------------
 
 
-// accountæµ‹è¯•ä»£ç 
+// account²âÊÔ´úÂë
 // -----------------------------------------------------
     void testAccount()
     {
-        // å£°æ˜æµ‹è¯•æ•°æ®
+        // ÉùÃ÷²âÊÔÊı¾İ
         int license[3] = {149074999, 149074998, 10028};
-        char name[3][STR_LEN] = {"å¼ ä¸‰", "æå››", "ç‹äº”", };
-        char classes[3][STR_LEN] = {"ç½‘149", "ç½‘148", "", };
+        char name[3][STR_LEN] = {"ÕÅÈı", "ÀîËÄ", "ÍõÎå", };
+        char classes[3][STR_LEN] = {"Íø149", "Íø148", "", };
         AccountRank rank[3] = {STUDENT, STUDENT, TEACHER, };
 
         tListStruct * pAccList = GetAccountList();
@@ -178,7 +178,7 @@
             AddToAccountList(CreateAccountPrototype(license[i], name[i], classes[i], rank[i]));
         }
 
-        // æµ‹è¯• AddToAccountList
+        // ²âÊÔ AddToAccountList
         tListNode * pHeadAcc = GetListHead(pAccList);
         account_info * headAcc = (account_info*)(pHeadAcc->data);
         assert(headAcc->license == license[2]);
@@ -187,10 +187,11 @@
         account_info * nextAcc = (account_info*)(pNextAcc->data);
         assert(nextAcc->license == license[1]);
 
-        // æµ‹è¯• Setter/Getter
+        // ²âÊÔ Setter/Getter
         assert(strcmp((char*)GetAccountInfo(license[0], NAME), name[0]) == 0);
-        char nameChange[STR_LEN] = "èµµå…­";
+        char nameChange[STR_LEN] = "ÕÔÁù";
         ModifyAccountInfo(license[0], (void*)nameChange, NAME);
         assert(strcmp((char*)GetAccountInfo(license[0], NAME), nameChange) == 0);
     }
 // -----------------------------------------------------
+

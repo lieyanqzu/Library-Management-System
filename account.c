@@ -1,9 +1,9 @@
-О╩©/*******************************************************
+/*******************************************************
  File name: account.c 
  Date: 2015.12.10
  
- Description: Ф┴─Ф°┴Х╢╕Ф┬╥Г └Д©║Ф│╞О╪▄Е▄┘Ф▀╛Х╞╩Х─┘Е▓▄Г╝║Г░├Е▒≤О╪┬Ф╞▐Д╦─Д╦╙Д╨╨
-    Г └Е─÷Д╧╕Д©║Ф│╞Е▄┘Ф▀╛Е─÷Д╧╕Х╞│Е▐╥Ц─│Е╖⌠Е░█Ц─│Г▐╜Г╨╖Ц─│Е╜╕Е▐╥Г╜┴Ц─┌О╪┴ 
+ Description: кЫспук╩╖╣дпео╒ё╛╟Эю╗╤ауъ╨м╧эюМт╠ё╗ц©р╩╦Жхк
+    ╣д╫ХйИпео╒╟Эю╗╫ХйИж╓╨е║╒пуцШ║╒╟Ю╪╤║╒я╖╨е╣х║ёё╘ 
     
  Dependency: list_node
 
@@ -14,11 +14,13 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <math.h>
+#include <stdio.h>
 
 #include "account.h"
 
 /*
-// Х╢╕Ф┬╥Д©║Ф│╞
+// ук╩╖пео╒
 typedef struct {
     int             license;
     char            name[STR_LEN];
@@ -29,7 +31,7 @@ typedef struct {
 
 tListStruct * accountList = NULL;
 
-// Х▌╥Е╬≈Х╢╕Ф┬╥И⌠╬Х║╗ 
+// ╩Я╣цук╩╖а╢╠М 
 tListStruct * GetAccountList()
 {
     if (NULL == accountList) {
@@ -39,20 +41,23 @@ tListStruct * GetAccountList()
     return accountList;
 }
 
-// Е╩╨Г╚▀Х╢╕Ф┬╥Д©║Ф│╞Е▌÷Е·▀
+// ╫╗а╒ук╩╖пео╒т╜пм
 account_info * CreateAccountPrototype(int license_, char *name_, char *classes_, AccountRank rank_)
 {
     account_info * pAcc = (account_info*)malloc(sizeof(account_info));
+    char buf[PW_LEN];
+    sprintf(buf, "%d", license_);
 
     pAcc->license = license_;
-    strncpy(pAcc->name, name_, STR_LEN);
-    strncpy(pAcc->classes, classes_, STR_LEN);
+    strncpy(pAcc->password, buf, PW_LEN-1);
+    strncpy(pAcc->name, name_, STR_LEN-1);
+    strncpy(pAcc->classes, classes_, STR_LEN-1);
     pAcc->rank = rank_;
 
     return pAcc;
 }
 
-// Ф▄┴Х╢╕Е▐╥Ф░°Г╢╒Ф²║Д╩╤ 
+// ╟╢ук╨екякВлУ╪Ч 
 static int SearchAccountCondition(tListNode *pNode, void *arg)
 {
     int * pLicense = (int*)arg;
@@ -64,20 +69,23 @@ static int SearchAccountCondition(tListNode *pNode, void *arg)
     return FAILURE;	  
 }
  
-// Г■╗Д╨▌Ф▄┴Х╢╕Ф┬╥Е▐╥Ф▐▓Е┘╔Г └Ф²║Д╩╤
+// сцсз╟╢ук╩╖╨е╡ЕхК╣длУ╪Ч
 static int AddAccountCondition(tListNode * pNode, tListNode * pAddNode, void * arg)
 {
     tListNode * pNodeNext = GetListNext(pNode);
+    account_info * accInfoPrev = NULL;
+    account_info * accInfoNext = NULL;
+    account_info * accInfoCurr = NULL;
     
     if (NULL == pNodeNext) {
         return SUCCESS;
     }
     
-    account_info * accInfoPrev = (account_info*)(pNode->data);
-    account_info * accInfoNext = (account_info*)(pNodeNext->data);
-    account_info * accInfoCurr = (account_info*)(pAddNode->data);
+    accInfoPrev = (account_info*)(pNode->data);
+    accInfoNext = (account_info*)(pNodeNext->data);
+    accInfoCurr = (account_info*)(pAddNode->data);
     
-    // Ф▄┴Х╢╕Ф┬╥Е▐╥Г═│Ф▌▓Е╨▐Е┼═Е┘╔И⌠╬Х║╗ 
+    // ╟╢ук╩╖╨ебКеепР╪схКа╢╠М 
     if (accInfoPrev->license <= accInfoCurr->license 
         && accInfoCurr->license < accInfoNext->license) {
             return SUCCESS;
@@ -85,22 +93,22 @@ static int AddAccountCondition(tListNode * pNode, tListNode * pAddNode, void * a
     return FAILURE;
 }
 
-// Ф▄┴Х╢╕Е▐╥Ф░°Г╢╒Х╢╕Ф┬╥Х┼┌Г┌╧ 
-static tListNode * SearchAccountByLicense(int license)
+// ╟╢ук╨екякВук╩╖╫з╣Ц 
+tListNode * SearchAccountByLicense(int license)
 {
     tListStruct * pList = accountList;
     tListNode * pNode = SearchListNode(pList, SearchAccountCondition, &license);
     return pNode;
 }
 
-// Х©■Е⌡·Х┼┌Г┌╧Г └Х╢╕Ф┬╥Е▐╥
-static int GetLicenseByNode(tListNode * pNode)
+// ╥╣╩ь╫з╣Ц╣дук╩╖╨е
+int GetLicenseByNode(tListNode * pNode)
 {
     account_info * pAcc = (account_info*)(pNode->data);
     return pAcc->license;
 }
 
-// Е╟├Х╢╕Ф┬╥Д©║Ф│╞Ф▐▓Е┘╔И⌠╬Х║╗ 
+// ╫╚ук╩╖пео╒╡ЕхКа╢╠М 
 int AddToAccountList(account_info * pAcc)
 {
     tListStruct * pAccList = GetAccountList();
@@ -117,7 +125,7 @@ int AddToAccountList(account_info * pAcc)
     return AddListNode(pAccList, (void*)pAcc, AddAccountCondition, NULL);
 }
 
-// ФЁ╗И■─Д╦─Д╦╙Х╢╕Ф┬╥ 
+// в╒оЗр╩╦Жук╩╖ 
 int RemoveAccountByLicense(int license)
 {
     tListNode * pNode = SearchAccountByLicense(license);
@@ -132,23 +140,27 @@ int RemoveAccountByLicense(int license)
     }
 }
 
-// Д©╝Ф■╧Х╢╕Ф┬╥Д©║Ф│╞ 
+// пч╦дук╩╖пео╒ 
 int ModifyAccountInfo(int license, void * arg, AccountFlag mFlag)
 {
     tListNode * pNode = SearchAccountByLicense(license);
     account_info * pAccount = (account_info*)(pNode->data);
-    
+
     char * pChar = NULL;
     AccountRank * pRank = NULL;
     
     switch (mFlag) {
+    case PASSWORD:
+        pChar = (char*)arg;
+        strncpy(pAccount->password, pChar, PW_LEN-1);
+        break;
     case NAME:
         pChar = (char*)arg;
-        strncpy(pAccount->name, pChar, STR_LEN);
+        strncpy(pAccount->name, pChar, STR_LEN-1);
         break;
     case CLASSES:
         pChar = (char*)arg;
-        strncpy(pAccount->classes, pChar, STR_LEN);
+        strncpy(pAccount->classes, pChar, STR_LEN-1);
         break;
     case RANK:
         pRank = (AccountRank*)arg;
@@ -159,16 +171,19 @@ int ModifyAccountInfo(int license, void * arg, AccountFlag mFlag)
     return SUCCESS;
 }
 
-// Х▌╥Е▐√Х╢╕Ф┬╥Д©║Ф│╞ 
+// ╩Ях║ук╩╖пео╒ 
 void * GetAccountInfo(int license, AccountFlag gFlag)
 {
     tListNode * pNode = SearchAccountByLicense(license);
     account_info * pAccount = (account_info*)(pNode->data);
-    
+
     char * pChar = NULL;
     AccountRank * pRank = NULL;
     
     switch (gFlag) {
+    case PASSWORD:
+        pChar = pAccount->password;
+        return (void*)pChar;
     case NAME:
         pChar = pAccount->name;
         return (void*)pChar;
@@ -181,4 +196,11 @@ void * GetAccountInfo(int license, AccountFlag gFlag)
     default:
         return NULL; 
     }
+}
+
+int DeleteAccountListCondition(tListNode *pNode, void *arg)
+{
+    account_info* pAcc = (account_info*)(pNode->data);
+    free(pAcc);
+    return SUCCESS;
 }

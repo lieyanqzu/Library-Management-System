@@ -1,11 +1,11 @@
-ï»¿/*******************************************************
+/*******************************************************
  File name: book_lent.h
  
  Date: 2015.12.7
  
- Description: å·²å€Ÿå‡ºå›¾ä¹¦çš„ä¿¡æ¯("æ¯ä¸€æœ¬è¢«å€Ÿé˜…çš„ä¹¦éƒ½åŒ…æ‹¬å¦‚
-    ä¸‹ä¿¡æ¯ï¼šç¼–å·ã€ä¹¦åã€é‡‘é¢ã€å€Ÿä¹¦è¯å·ã€å€Ÿä¹¦æ—¥æœŸã€åˆ°æœŸæ—¥
-    æœŸã€ç½šæ¬¾é‡‘é¢ç­‰ã€‚")
+ Description: ÒÑ½è³öÍ¼ÊéµÄĞÅÏ¢("Ã¿Ò»±¾±»½èÔÄµÄÊé¶¼°üÀ¨Èç
+    ÏÂĞÅÏ¢£º±àºÅ¡¢ÊéÃû¡¢½ğ¶î¡¢½èÊéÖ¤ºÅ¡¢½èÊéÈÕÆÚ¡¢µ½ÆÚÈÕ
+    ÆÚ¡¢·£¿î½ğ¶îµÈ¡£")
     
  Dependency: list_node
 
@@ -21,7 +21,7 @@
 
 #include "list_node.h"
 
-// ä¿®æ”¹æ•°æ®æ—¶é€‰æ‹©çš„ä¿¡æ¯é¡¹ 
+// ĞŞ¸ÄÊı¾İÊ±Ñ¡ÔñµÄĞÅÏ¢Ïî 
 typedef enum {
     LICENSE = 0, 
     BORROW_TIME = 1, 
@@ -29,7 +29,7 @@ typedef enum {
     FINE = 3,  
 } LentInfoFlag;
 
-// å·²å€Ÿå‡ºå›¾ä¹¦ä¿¡æ¯ 
+// ÒÑ½è³öÍ¼ÊéĞÅÏ¢ 
 typedef struct {
     int     id;
     int     license;
@@ -38,37 +38,38 @@ typedef struct {
     double  fine;
 } book_lent_info;
 
-// æŒ‰IDæœç´¢å·²å€Ÿå‡ºå›¾ä¹¦
+// °´IDËÑË÷ÒÑ½è³öÍ¼Êé
 static int SearchLentBookCondition(tListNode *pListNode, void *arg);
 
-// é€šè¿‡IDå¾—åˆ°book_lent_info 
+// Í¨¹ıIDµÃµ½book_lent_info 
 static book_lent_info * GetLentInfoById(int id); 
 
-// è¿”å›book_lent_infoç»“æ„ 
+// ·µ»Øbook_lent_info½á¹¹ 
 book_lent_info * CreateLentPrototype(int id_, int license_, time_t borrow_time_);
 
-// è¿”å›å·²å€Ÿå‡ºå›¾ä¹¦é“¾è¡¨ 
+// ·µ»ØÒÑ½è³öÍ¼ÊéÁ´±í 
 tListStruct * GetBookLentList() ;
 
-// åŠ å…¥æ–°çš„å·²å€Ÿå‡ºæ•°æ®è‡³é“¾è¡¨ 
+// ¼ÓÈëĞÂµÄÒÑ½è³öÊı¾İÖÁÁ´±í 
 int AddToBookLentList(book_lent_info * pLentBook);
 
-// é€šè¿‡IDæœç´¢å·²å€Ÿå‡ºå›¾ä¹¦èŠ‚ç‚¹ 
+// Í¨¹ıIDËÑË÷ÒÑ½è³öÍ¼Êé½Úµã 
 tListNode * SearchLentBookById(int id);
 
-// åˆ é™¤ä¸€æœ¬å·²å€Ÿå‡ºå›¾ä¹¦ä¿¡æ¯ 
+// É¾³ıÒ»±¾ÒÑ½è³öÍ¼ÊéĞÅÏ¢ 
 int RemoveLentBook(int id);
 
-// è¿”å›èŠ‚ç‚¹æ‰€æŒ‡å‘çš„å›¾ä¹¦ID 
+// ·µ»Ø½ÚµãËùÖ¸ÏòµÄÍ¼ÊéID 
 int GetLentId(tListNode * pNode);
 
-// ä¿®æ”¹å›¾ä¹¦è¿‡æœŸæ—¶é—´ 
+// ĞŞ¸ÄÍ¼Êé¹ıÆÚÊ±¼ä 
 int SetLentExpireTime(int id, time_t expire_time_);
 
-// ä¿®æ”¹å›¾ä¹¦ç½šé‡‘ 
+// ĞŞ¸ÄÍ¼Êé·£½ğ 
 int SetLentFine(int id, double fine_);
 
-// è¿”å›å·²å€Ÿå‡ºçš„å›¾ä¹¦çš„ä¿¡æ¯é¡¹ 
+// ·µ»ØÒÑ½è³öµÄÍ¼ÊéµÄĞÅÏ¢Ïî 
 void * GetLentBookInfo(int id, LentInfoFlag sFlag);
 
 #endif
+

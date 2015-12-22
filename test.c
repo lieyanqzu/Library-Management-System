@@ -1,12 +1,12 @@
-ï»¿/*******************************************************
+/*******************************************************
  File name: test.c
  
  Date: 2015.12.3
  
- Description: ä¸ºç¼–å†™æ¨¡å—è¿›è¡Œå•å…ƒæµ‹è¯• 
+ Description: Îª±àĞ´Ä£¿é½øĞĞµ¥Ôª²âÊÔ 
 
- History: 1ã€2015.12.4 é‡å†™list_nodeæ¨¡å—æµ‹è¯• 
-    2ã€2015.12.5 æµ‹è¯•ä»£ç åˆ†ç¦»è‡³unit_test 
+ History: 1¡¢2015.12.4 ÖØĞ´list_nodeÄ£¿é²âÊÔ 
+    2¡¢2015.12.5 ²âÊÔ´úÂë·ÖÀëÖÁunit_test 
  
 ********************************************************/
 
@@ -15,24 +15,25 @@
 
 #include "unit_test.h"
 
-int main(int argc, char* argv[])
-{
-    // list_nodeæµ‹è¯•
-//    testListNode();
-//    printf("list_node test passed!\n");
-    
-    // bookæµ‹è¯•
-//    testBook();
-//    printf("book test passed!\n");
+//int main(int argc, char* argv[])
+//{
+//    // list_node²âÊÔ
+////    testListNode();
+////    printf("list_node test passed!\n");
+//
+//    // book²âÊÔ
+////    testBook();
+////    printf("book test passed!\n");
+//
+//
+//    // book_lent²âÊÔ
+////    testBookLent();
+////    printf("book_lent test passed!\n");
+//
+//    // account²âÊÔ
+////    testAccount();
+////    printf("account test passed!\n");
+//
+//    return 0;
+//}
 
-
-    // book_lentæµ‹è¯• 
-//    testBookLent();
-//    printf("book_lent test passed!\n");
-
-    // accountæµ‹è¯•
-//    testAccount();
-//    printf("account test passed!\n");
-
-    return 0;
-}

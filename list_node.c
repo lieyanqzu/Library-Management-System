@@ -1,13 +1,13 @@
-ï»¿/*******************************************************
+/*******************************************************
  File name: list_node.c
  
  Date: 2015.12.3
  
- Description: æä¾›ç”¨äºŽåˆ›å»ºé“¾è¡¨æ•°æ®ç»“æž„çš„ç›¸å…³å‡½æ•°ï¼ŒåŒ…æ‹¬åˆ›
-    å»ºé“¾è¡¨ã€æ·»åŠ èŠ‚ç‚¹ã€æœç´¢èŠ‚ç‚¹ã€åˆ é™¤é“¾è¡¨æˆ–èŠ‚ç‚¹ã€ç‰¹æ®ŠèŠ‚ç‚¹
-    çš„è¿”å›ž 
+ Description: Ìá¹©ÓÃÓÚ´´½¨Á´±íÊý¾Ý½á¹¹µÄÏà¹Øº¯Êý£¬°üÀ¨´´
+    ½¨Á´±í¡¢Ìí¼Ó½Úµã¡¢ËÑË÷½Úµã¡¢É¾³ýÁ´±í»ò½Úµã¡¢ÌØÊâ½Úµã
+    µÄ·µ»Ø 
 
- History: 1ã€2015.12.5 ä¿®æ”¹éƒ¨åˆ†ä»£ç  
+ History: 1¡¢2015.12.5 ÐÞ¸Ä²¿·Ö´úÂë 
  
 ********************************************************/
 
@@ -17,13 +17,13 @@
 #include "list_node.h"
 
 /*
-// é“¾è¡¨èŠ‚ç‚¹åŽŸåž‹å£°æ˜Ž 
+// Á´±í½ÚµãÔ­ÐÍÉùÃ÷ 
 typedef struct ListNode {
-    void 			*data; // ä»¥ä¸å®šæ•°æ®ç±»åž‹å®šä¹‰data 
+    void 			*data; // ÒÔ²»¶¨Êý¾ÝÀàÐÍ¶¨Òådata 
     struct ListNode *next;
 } tListNode;
 
-// é“¾è¡¨ä¿¡æ¯å¤´åŽŸåž‹å£°æ˜Ž 
+// Á´±íÐÅÏ¢Í·Ô­ÐÍÉùÃ÷ 
 typedef struct ListStruct {
     struct ListNode *head;
     struct ListNode *tail;
@@ -31,7 +31,7 @@ typedef struct ListStruct {
 } tListStruct;
 */
 
-// åˆ›å»ºé“¾è¡¨ 
+// ´´½¨Á´±í 
 tListStruct * CreateList()
 {
 	tListStruct *pList = (tListStruct*)malloc(sizeof(tListStruct));
@@ -47,20 +47,22 @@ tListStruct * CreateList()
 	return pList;
 }
 
-// åˆ é™¤é“¾è¡¨[ï¼Œå¯é€‰æ·±å…¥é‡Šæ”¾å†…å±‚ç”³è¯·å†…å­˜]
+// É¾³ýÁ´±í[£¬¿ÉÑ¡ÉîÈëÊÍ·ÅÄÚ²ãÉêÇëÄÚ´æ]
 int DeleteList(tListStruct *pListStruct, 
     void DeepDelete(tListNode * pNode, void * args), void * args)
 {
+	tListNode *p = NULL;
+
 	if (NULL == pListStruct) {
 		return FAILURE;
 	}
 
 	while (pListStruct->head != NULL) {
-		tListNode *p = pListStruct->head;
+		p = pListStruct->head;
 		pListStruct->head = pListStruct->head->next;
 		pListStruct->length -= 1;
 		
-		// å¯å®šåˆ¶æ·±å…¥é‡Šæ”¾æ¯ä¸€ä¸ªèŠ‚ç‚¹å†…éƒ¨ 
+		// ¿É¶¨ÖÆÉîÈëÊÍ·ÅÃ¿Ò»¸ö½ÚµãÄÚ²¿ 
 		if (DeepDelete != NULL) {
 		    DeepDelete(p, args);
         }
@@ -75,20 +77,23 @@ int DeleteList(tListStruct *pListStruct,
 	return SUCCESS;
 }
 
-// å¢žåŠ é“¾è¡¨èŠ‚ç‚¹è‡³é“¾è¡¨å°¾éƒ¨[ï¼Œå¯é€‰æŒ‰æ¡ä»¶æ’å…¥èŠ‚ç‚¹] 
+// Ôö¼ÓÁ´±í½ÚµãÖÁÁ´±íÎ²²¿[£¬¿ÉÑ¡°´Ìõ¼þ²åÈë½Úµã] 
 int AddListNode(tListStruct *pListStruct, void *pData,
 	int Condition(tListNode * pNode, tListNode * pAddNode, void * args), void * args)
 {
+	tListNode *node = NULL;
+	tListNode *tempNode = NULL;
+
 	if (NULL == pListStruct) {
 		return FAILURE;
 	}
 	
-	tListNode *node = (tListNode*)malloc(sizeof(tListNode));
+	node = (tListNode*)malloc(sizeof(tListNode));
 	node->data = pData;
 	node->next = NULL;
 	
 	if (NULL == Condition) {
-	    // æœªæä¾›æ·»åŠ æ¡ä»¶æ—¶æ’å…¥é“¾è¡¨å°¾éƒ¨ 
+	    // Î´Ìá¹©Ìí¼ÓÌõ¼þÊ±²åÈëÁ´±íÎ²²¿ 
     	if (NULL == pListStruct->head) {
     		pListStruct->head = node;
     		pListStruct->length += 1;
@@ -106,8 +111,8 @@ int AddListNode(tListStruct *pListStruct, void *pData,
     	return SUCCESS;
     }
     else {
-        // æä¾›æ·»åŠ æ¡ä»¶æ—¶æŒ‰æ¡ä»¶æœç´¢å¹¶æ’å…¥ 
-    	tListNode *tempNode = pListStruct->head;
+        // Ìá¹©Ìí¼ÓÌõ¼þÊ±°´Ìõ¼þËÑË÷²¢²åÈë 
+    	tempNode = pListStruct->head;
     	while (tempNode != NULL) {
     		if (Condition(tempNode, node, args) == SUCCESS) {
     			node->next = tempNode->next;
@@ -121,14 +126,17 @@ int AddListNode(tListStruct *pListStruct, void *pData,
     }
 }
 
-// å¢žåŠ é“¾è¡¨èŠ‚ç‚¹ä½¿ä¹‹æˆä¸ºé“¾è¡¨å¤´éƒ¨ 
+// Ôö¼ÓÁ´±í½ÚµãÊ¹Ö®³ÉÎªÁ´±íÍ·²¿ 
 int AddListNodeToHead(tListStruct *pListStruct, void *pData)
 {
+	tListNode *node = NULL;
+	tListNode * pHead = NULL;
+
     if (NULL == pListStruct) {
 		return FAILURE;
 	}
 	
-	tListNode *node = (tListNode*)malloc(sizeof(tListNode));
+	node = (tListNode*)malloc(sizeof(tListNode));
 	node->data = pData;
 	node->next = NULL;
 	
@@ -136,21 +144,23 @@ int AddListNodeToHead(tListStruct *pListStruct, void *pData)
 		AddListNode(pListStruct, pData, NULL, NULL);
     }
     else {
-        tListNode * pHead = pListStruct->head;
+        pHead = pListStruct->head;
         node->next = pHead;
         pListStruct->head = node;
         pListStruct->length += 1;
     }
 } 
 
-// åˆ é™¤é“¾è¡¨ä¸­æŸä¸€èŠ‚ç‚¹ 
+// É¾³ýÁ´±íÖÐÄ³Ò»½Úµã 
 int DeleteListNode(tListStruct *pListStruct, tListNode *pNode)
 {
+	tListNode *tempNode = NULL;
+
 	if (NULL == pListStruct || NULL == pNode) {
 		return FAILURE;
 	}
     
-    // é“¾è¡¨ä¸­åªæœ‰ä¸€ä¸ªèŠ‚ç‚¹æ—¶ 
+    // Á´±íÖÐÖ»ÓÐÒ»¸ö½ÚµãÊ± 
 	if (pListStruct->head == pNode) {
 		pListStruct->head = pListStruct->head->next;
 		pNode->next = NULL;
@@ -161,8 +171,8 @@ int DeleteListNode(tListStruct *pListStruct, tListNode *pNode)
 		return SUCCESS;
 	}
     
-    // æŸ¥æ‰¾èŠ‚ç‚¹å¹¶åˆ é™¤ 
-	tListNode *tempNode = pListStruct->head;
+    // ²éÕÒ½Úµã²¢É¾³ý 
+	tempNode = pListStruct->head;
 	while (tempNode != NULL) {
 		if (tempNode->next == pNode) {
 			tempNode->next = tempNode->next->next;
@@ -176,14 +186,16 @@ int DeleteListNode(tListStruct *pListStruct, tListNode *pNode)
 	return FAILURE;
 }
 
-// æŒ‰æ¡ä»¶æœç´¢èŠ‚ç‚¹ 
+// °´Ìõ¼þËÑË÷½Úµã 
 tListNode * SearchListNode(tListStruct *pListStruct,
 	int Condition(tListNode * pNode, void * args), void * args)
 {
+	tListNode *tempNode = NULL;
+
 	if (NULL == pListStruct || NULL == Condition) {
 		return NULL;
 	}
-	tListNode *tempNode = pListStruct->head;
+	tempNode = pListStruct->head;
 	while (tempNode != NULL) {
 		if (Condition(tempNode, args) == SUCCESS) {
 			return tempNode;
@@ -193,7 +205,7 @@ tListNode * SearchListNode(tListStruct *pListStruct,
 	return NULL;
 }
 
-// è¿”å›žé“¾è¡¨çš„å¤´èŠ‚ç‚¹ 
+// ·µ»ØÁ´±íµÄÍ·½Úµã 
 tListNode * GetListHead(tListStruct *pListStruct)
 {
 	if (NULL == pListStruct) {
@@ -203,7 +215,7 @@ tListNode * GetListHead(tListStruct *pListStruct)
 	return pListStruct->head;
 }
 
-// è¿”å›žé“¾è¡¨çš„å°¾èŠ‚ç‚¹ 
+// ·µ»ØÁ´±íµÄÎ²½Úµã 
 tListNode * GetListTail(tListStruct *pListStruct)
 {
     if (NULL == pListStruct) {
@@ -213,7 +225,7 @@ tListNode * GetListTail(tListStruct *pListStruct)
 	return pListStruct->tail;
 }
 
-// è¿”å›žå½“å‰èŠ‚ç‚¹çš„ä¸‹ä¸€èŠ‚ç‚¹ 
+// ·µ»Øµ±Ç°½ÚµãµÄÏÂÒ»½Úµã 
 tListNode * GetListNext(tListNode *pNode)
 {
 	if (NULL == pNode) {
@@ -223,14 +235,15 @@ tListNode * GetListNext(tListNode *pNode)
 	return pNode->next;
 }
 
-// è¿”å›žå½“å‰èŠ‚ç‚¹çš„ä¸Šä¸€èŠ‚ç‚¹ 
+// ·µ»Øµ±Ç°½ÚµãµÄÉÏÒ»½Úµã 
 tListNode * GetListPrev(tListStruct * pList, tListNode *pNode)
 {
+	tListNode * pTempNode = NULL;
     if (pList == NULL || pNode == NULL) {
         return NULL;
     }
     
-    tListNode * pTempNode = pList->head;
+    pTempNode = pList->head;
     while (pTempNode->next != NULL) {
         if (pTempNode->next == pNode) {
             return pTempNode;
@@ -239,3 +252,4 @@ tListNode * GetListPrev(tListStruct * pList, tListNode *pNode)
     }
     return NULL;
 }
+

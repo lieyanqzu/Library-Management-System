@@ -1,13 +1,13 @@
-ï»¿/*******************************************************
+/*******************************************************
  File name: list_node.h
  
  Date: 2015.12.3
  
- Description: æä¾›ç”¨äºåˆ›å»ºé“¾è¡¨æ•°æ®ç»“æ„çš„ç›¸å…³å‡½æ•°ï¼ŒåŒ…æ‹¬åˆ›
-    å»ºé“¾è¡¨ã€æ·»åŠ èŠ‚ç‚¹ã€æœç´¢èŠ‚ç‚¹ã€åˆ é™¤é“¾è¡¨æˆ–èŠ‚ç‚¹ã€ç‰¹æ®ŠèŠ‚ç‚¹
-    çš„è¿”å›
+ Description: Ìá¹©ÓÃÓÚ´´½¨Á´±íÊı¾İ½á¹¹µÄÏà¹Øº¯Êı£¬°üÀ¨´´
+    ½¨Á´±í¡¢Ìí¼Ó½Úµã¡¢ËÑË÷½Úµã¡¢É¾³ıÁ´±í»ò½Úµã¡¢ÌØÊâ½Úµã
+    µÄ·µ»Ø
 
- History: 1ã€2015.12.5 ä¿®æ”¹éƒ¨åˆ†ä»£ç  
+ History: 1¡¢2015.12.5 ĞŞ¸Ä²¿·Ö´úÂë 
  
 ********************************************************/
 
@@ -18,50 +18,51 @@
 #define SUCCESS 0
 #define FAILURE (-1)
 
-// é“¾è¡¨èŠ‚ç‚¹åŸå‹å£°æ˜ 
+// Á´±í½ÚµãÔ­ĞÍÉùÃ÷ 
 typedef struct ListNode {
-    void 			*data; // ä»¥ä¸å®šæ•°æ®ç±»å‹å®šä¹‰data
+    void 			*data; // ÒÔ²»¶¨Êı¾İÀàĞÍ¶¨Òådata
     struct ListNode *next;
 } tListNode;
 
-// é“¾è¡¨ä¿¡æ¯å¤´åŸå‹å£°æ˜ 
+// Á´±íĞÅÏ¢Í·Ô­ĞÍÉùÃ÷ 
 typedef struct ListStruct {
     struct ListNode *head;
     struct ListNode *tail;
     int 			length;
 } tListStruct;
 
-// åˆ›å»ºé“¾è¡¨ 
+// ´´½¨Á´±í 
 tListStruct * CreateList();
 
-// åˆ é™¤é“¾è¡¨[ï¼Œå¯é€‰æ·±å…¥é‡Šæ”¾å†…å±‚ç”³è¯·å†…å­˜ ]
+// É¾³ıÁ´±í[£¬¿ÉÑ¡ÉîÈëÊÍ·ÅÄÚ²ãÉêÇëÄÚ´æ ]
 int DeleteList(tListStruct *pListStruct, 
     void DeepDelete(tListNode * pNode, void * args), void * args);
 
-// å¢åŠ é“¾è¡¨èŠ‚ç‚¹è‡³é“¾è¡¨å°¾éƒ¨[ï¼Œå¯é€‰æŒ‰æ¡ä»¶æ’å…¥èŠ‚ç‚¹] 
+// Ôö¼ÓÁ´±í½ÚµãÖÁÁ´±íÎ²²¿[£¬¿ÉÑ¡°´Ìõ¼ş²åÈë½Úµã] 
 int AddListNode(tListStruct *pListStruct, void *pData,
                 int Condition(tListNode * pNode, tListNode * pAddNode, void * args), void * args);
 
-// å¢åŠ é“¾è¡¨èŠ‚ç‚¹ä½¿ä¹‹æˆä¸ºé“¾è¡¨å¤´éƒ¨ 
+// Ôö¼ÓÁ´±í½ÚµãÊ¹Ö®³ÉÎªÁ´±íÍ·²¿ 
 int AddListNodeToHead(tListStruct *pListStruct, void *pData);
 
-// åˆ é™¤é“¾è¡¨ä¸­æŸä¸€èŠ‚ç‚¹ 
+// É¾³ıÁ´±íÖĞÄ³Ò»½Úµã 
 int DeleteListNode(tListStruct *pListStruct, tListNode *pNode);
 
-// æŒ‰æ¡ä»¶æœç´¢èŠ‚ç‚¹ 
+// °´Ìõ¼şËÑË÷½Úµã 
 tListNode * SearchListNode(tListStruct *pListStruct,
     int Condition(tListNode * pNode, void * args), void * args);
     
-// è¿”å›é“¾è¡¨çš„å¤´èŠ‚ç‚¹ 
+// ·µ»ØÁ´±íµÄÍ·½Úµã 
 tListNode * GetListHead(tListStruct *pListStruct);
 
-// è¿”å›é“¾è¡¨çš„å°¾èŠ‚ç‚¹ 
+// ·µ»ØÁ´±íµÄÎ²½Úµã 
 tListNode * GetListTail(tListStruct *pListStruct);
 
-// è¿”å›å½“å‰èŠ‚ç‚¹çš„ä¸‹ä¸€èŠ‚ç‚¹ 
+// ·µ»Øµ±Ç°½ÚµãµÄÏÂÒ»½Úµã 
 tListNode * GetListNext(tListNode *pNode);
 
-// è¿”å›å½“å‰èŠ‚ç‚¹çš„ä¸Šä¸€èŠ‚ç‚¹ 
+// ·µ»Øµ±Ç°½ÚµãµÄÉÏÒ»½Úµã 
 tListNode * GetListPrev(tListStruct * pList, tListNode *pNode);
 
 #endif
+

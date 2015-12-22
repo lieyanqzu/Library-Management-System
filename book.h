@@ -1,11 +1,11 @@
-ï»¿/*******************************************************
+/*******************************************************
  File name: book.h
  
  Date: 2015.12.4
  
- Description: å›¾ä¹¦çš„åº“å­˜ä¿¡æ¯("æ¯ä¸€ç§å›¾ä¹¦çš„åº“å­˜ä¿¡æ¯åŒ…æ‹¬ç¼–
-    å·ã€ä¹¦åã€ä½œè€…ã€å‡ºç‰ˆç¤¾ã€å‡ºç‰ˆæ—¥æœŸã€é‡‘é¢ã€ç±»åˆ«ã€æ€»å…¥åº“
-    æ•°é‡ã€å½“å‰åº“å­˜é‡ã€å·²å€Ÿå‡ºæœ¬æ•°ç­‰ã€‚")
+ Description: Í¼ÊéµÄ¿â´æĞÅÏ¢("Ã¿Ò»ÖÖÍ¼ÊéµÄ¿â´æĞÅÏ¢°üÀ¨±à
+    ºÅ¡¢ÊéÃû¡¢×÷Õß¡¢³ö°æÉç¡¢³ö°æÈÕÆÚ¡¢½ğ¶î¡¢Àà±ğ¡¢×ÜÈë¿â
+    ÊıÁ¿¡¢µ±Ç°¿â´æÁ¿¡¢ÒÑ½è³ö±¾ÊıµÈ¡£")
     
  Dependency: list_node
 
@@ -24,14 +24,14 @@
 #define MAX_STR 64
 #define ISBN_LEN 14
 
-// å›¾ä¹¦ç±»å‹åˆ†ç±» 
+// Í¼ÊéÀàĞÍ·ÖÀà 
 typedef enum {
     BOOK = 1, 
     PERIODICALS = 2, 
     NEWSPAPER = 3, 
 } BookType;
 
-// å›¾ä¹¦çŠ¶æ€ 
+// Í¼Êé×´Ì¬ 
 typedef enum {
     IDLE = 0, 
     LENT = 1, 
@@ -39,7 +39,7 @@ typedef enum {
     OFF_SHELF = 3, 
 } BookStatus;
 
-// è°ƒç”¨Setter/Getteræ–¹æ³•æ—¶éœ€è¦ä¿®æ”¹çš„å†…å®¹é¡¹ 
+// µ÷ÓÃSetter/Getter·½·¨Ê±ĞèÒªĞŞ¸ÄµÄÄÚÈİÏî 
 typedef enum {
     ISBN = 0, 
     TITLE = 1, 
@@ -52,14 +52,14 @@ typedef enum {
     STOCK = 8, 
 } InfoFlag;
 
-// å›¾ä¹¦åº“å­˜ä¿¡æ¯ 
+// Í¼Êé¿â´æĞÅÏ¢
 typedef struct {
     int         total_number;
     int         current_number;
     int         lent_number;
 } stock_info;
 
-// å›¾ä¹¦ä¿¡æ¯ 
+// Í¼ÊéĞÅÏ¢ 
 typedef struct {
     int         id;
     char        isbn[ISBN_LEN]; 
@@ -73,41 +73,42 @@ typedef struct {
     stock_info* stock;
 } book_info;
 
-// åˆ›å»ºå›¾ä¹¦ä¿¡æ¯ç»“æ„ 
+// ´´½¨Í¼ÊéĞÅÏ¢½á¹¹ 
 book_info * CreateBookPrototype(char *isbn, char *title_, char *author_, char *press_, 
     time_t time_, double price_, BookType type_);
 
-// æŒ‰IDæœç´¢ 
+// °´IDËÑË÷ 
 static int SearchBookCondition(tListNode *pListNode, void *arg);
 
-// æŒ‰ISBNæœç´¢ 
+// °´ISBNËÑË÷ 
 static int SearchISBNCondition(tListNode *pListNode, void *arg);
 
-// è·å–é“¾è¡¨è¡¨ç¤ºçš„å›¾ä¹¦ç±»å‹ 
+// »ñÈ¡Á´±í±íÊ¾µÄÍ¼ÊéÀàĞÍ 
 static BookType GetListFlag(tListStruct * pList);
 
-// æŒ‰èŠ‚ç‚¹ä¿¡æ¯è·å¾—æ‰€åœ¨é“¾è¡¨ 
+// °´½ÚµãĞÅÏ¢»ñµÃËùÔÚÁ´±í 
 static tListStruct * GetListByNode(tListNode * pNode);
 
-// æŒ‰IDæœç´¢å›¾ä¹¦èŠ‚ç‚¹ 
+// °´IDËÑË÷Í¼Êé½Úµã 
 static tListNode * SearchBookById(int id);
 
-// è¿”å›æ‰€éœ€è¦çš„é“¾è¡¨
+// ·µ»ØËùĞèÒªµÄÁ´±í
 tListStruct * GetListByType(BookType type); 
 
-// æŠŠå›¾ä¹¦ä¿¡æ¯ç»“æ„åŠ å…¥é“¾è¡¨ 
+// °ÑÍ¼ÊéĞÅÏ¢½á¹¹¼ÓÈëÁ´±í 
 int AddToBooksList(book_info * pBookInfo);
 
-// åˆ é™¤å›¾ä¹¦ 
+// É¾³ıÍ¼Êé 
 int RemoveBookById(int id);
 
-// ä¿®æ”¹å›¾ä¹¦ä¿¡æ¯ 
+// ĞŞ¸ÄÍ¼ÊéĞÅÏ¢ 
 int ModifyBookInfo(int id, void * arg, InfoFlag mFlag);
 
-// è·å–å›¾ä¹¦ä¿¡æ¯ 
+// »ñÈ¡Í¼ÊéĞÅÏ¢ 
 void * GetBookInfo(int id, InfoFlag gFlag);
 
-// è¿”å›å›¾ä¹¦èŠ‚ç‚¹ID 
+// ·µ»ØÍ¼Êé½ÚµãID 
 int GetBookID(tListNode * pNode); 
 
 #endif
+
