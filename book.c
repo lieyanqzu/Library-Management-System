@@ -9,7 +9,7 @@
     
  Dependency: list_node
 
- History: 
+ History: 2015.12.22 修改部分代码 
  
 ********************************************************/
 
@@ -36,7 +36,6 @@ typedef struct {
     char        title[MAX_STR];
     char        author[MAX_STR];
     char        press[MAX_STR];
-    time_t      public_time;
     double      price;
     BookType    type;
     BookStatus  status;
@@ -51,8 +50,8 @@ tListStruct * periodicalsList = NULL;
 tListStruct * newspaperList = NULL;
 
 // 创建图书信息结构 
-book_info * CreateBookPrototype(char *isbn_, char *title_, char *author_, char *press_, 
-    time_t time_, double price_, BookType type_)
+book_info * CreateBookPrototype(char *isbn_, char *title_, char *author_, 
+    char *press_, double price_, BookType type_)
 {
     book_info * pBook = (book_info*)malloc(sizeof(book_info));
     
@@ -65,7 +64,6 @@ book_info * CreateBookPrototype(char *isbn_, char *title_, char *author_, char *
     strncpy(pBook->title, title_, MAX_STR-1);
     strncpy(pBook->author, author_, MAX_STR-1);
     strncpy(pBook->press, press_, MAX_STR-1);
-    pBook->public_time = time_;
     pBook->price = price_;
     pBook->type = type_;
     pBook->status = IDLE;
@@ -123,9 +121,10 @@ static tListStruct * GetListByNode(tListNode * pNode)
 }
 
 // 按ID搜索图书节点 
-static tListNode * SearchBookById(int id)
+tListNode * SearchBookById(int id)
 {
     tListStruct * pList = NULL;
+    tListNode * pNode = NULL; 
     switch((BookType)(id / FLAG_POSITION)) { // 按ID计算图书类型 
     case BOOK:
         pList = bookList;
@@ -139,19 +138,35 @@ static tListNode * SearchBookById(int id)
     default:
         return NULL;            
     }
-    tListNode * pNode = SearchListNode(pList, SearchBookCondition, &id);
+    pNode = SearchListNode(pList, SearchBookCondition, &id);
+    return pNode;
+}
+
+// ISBN搜索图书节点  
+tListNode * SearchBookByISBN(tListStruct *pList, char *isbn)
+{
+    tListNode * pNode = SearchListNode(pList, SearchISBNCondition, isbn);
     return pNode;
 }
 
 // 返回所需要的链表
 tListStruct * GetListByType(BookType type)
 {
-    switch (type) {
+    switch ((BookType)type) {
     case BOOK:
+        if (NULL == bookList) {
+            bookList = CreateList();
+        }
         return bookList;
     case PERIODICALS:
+        if (NULL == periodicalsList) {
+            periodicalsList = CreateList();
+        }
         return periodicalsList;
     case NEWSPAPER:
+        if (NULL == newspaperList) {
+            newspaperList = CreateList();
+        }
         return newspaperList;
     default:
         return NULL;
@@ -169,23 +184,6 @@ int AddToBooksList(book_info * pBookInfo)
     if (NULL == pBookInfo) {
         return FAILURE;
     }
-    
-    if (NULL == pList) {
-        switch (pBookInfo->type) {
-        case BOOK:
-            bookList = CreateList();
-            break;
-        case PERIODICALS:
-            periodicalsList = CreateList();
-            break;
-        case NEWSPAPER:
-            newspaperList = CreateList();
-            break;
-        default:
-            break;
-        }
-    }
-    pList = GetListByType(pBookInfo->type);
     
     // 检查库中是否已有此书籍 
     pNode = SearchListNode(pList, SearchISBNCondition, pBookInfo->isbn);
@@ -231,7 +229,11 @@ int RemoveBookById(int id)
         }
         else {
             pStock->total_number--;
-            pStock->current_number--;
+            if (( (book_info*)(pNode->data) )->status == IDLE) {
+                pStock->current_number--;
+            } else if (( (book_info*)(pNode->data) )->status == LENT) {
+                pStock->lent_number--;
+            }
         }
         free(pNode->data);
         free(pNode);
@@ -249,7 +251,6 @@ int ModifyBookInfo(int id, void * arg, InfoFlag mFlag)
     book_info * pBook = (book_info*)(pNode->data);
     
     char * pChar = NULL;
-    time_t * pTime = NULL;
     double * pDouble = NULL;
     BookType * pType = NULL;
     BookStatus * pStatus = NULL;
@@ -271,10 +272,6 @@ int ModifyBookInfo(int id, void * arg, InfoFlag mFlag)
     case PRESS:
         pChar = (char*)arg;
         strncpy(pBook->press, pChar, MAX_STR-1);
-        break;
-    case PUBLIC_TIME:
-        pTime = (time_t*)arg;
-        pBook->public_time = *pTime;
         break;
     case PRICE:
         pDouble = (double*)arg;
@@ -302,10 +299,10 @@ void * GetBookInfo(int id, InfoFlag gFlag)
     book_info * pBook = (book_info*)(pNode->data);
     
     char * pChar = NULL;
-    time_t * pTime = NULL;
     double * pDouble = NULL;
     BookStatus * pStatus = NULL;
     stock_info * pStock = NULL;
+    BookType * pType = NULL;
     
     // 按InfoFlag确定获取项 
     switch (gFlag) {
@@ -321,12 +318,12 @@ void * GetBookInfo(int id, InfoFlag gFlag)
     case PRESS:
         pChar = pBook->press;
         return (void*)pChar;
-    case PUBLIC_TIME:
-        pTime = &(pBook->public_time);
-        return (void*)pTime;
     case PRICE:
         pDouble = &(pBook->price);
         return (void*)pDouble;
+    case TYPE:
+        pType = &(pBook->type);
+        return (void*)pType;
     case STATUS:
         pStatus = &(pBook->status);
         return (void*)pStatus;
@@ -353,4 +350,12 @@ int DeleteBookListCondition(tListNode *pNode, void *arg)
     free(pStock);
     free(pBook);
     return SUCCESS;
+}
+
+// 深层删除节点 
+void DeleteBookList()
+{
+    DeleteList(bookList, DeleteBookListCondition, NULL);
+    DeleteList(periodicalsList, DeleteBookListCondition, NULL);
+    DeleteList(newspaperList, DeleteBookListCondition, NULL);
 }

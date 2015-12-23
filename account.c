@@ -1,5 +1,6 @@
 /*******************************************************
  File name: account.c 
+ 
  Date: 2015.12.10
  
  Description: 所有账户的信息，包括读者和管理员（每一个人
@@ -203,4 +204,10 @@ int DeleteAccountListCondition(tListNode *pNode, void *arg)
     account_info* pAcc = (account_info*)(pNode->data);
     free(pAcc);
     return SUCCESS;
+}
+
+// 深层删除节点
+void DeleteAccountList()
+{
+    DeleteList(accountList, DeleteAccountListCondition, NULL);
 }

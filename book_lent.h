@@ -25,8 +25,7 @@
 typedef enum {
     LICENSE = 0, 
     BORROW_TIME = 1, 
-    EXPIRE_TIME = 2,  
-    FINE = 3,  
+    EXPIRE_TIME = 2, 
 } LentInfoFlag;
 
 // 已借出图书信息 
@@ -35,7 +34,6 @@ typedef struct {
     int     license;
     time_t  borrow_time;
     time_t  expire_time;
-    double  fine;
 } book_lent_info;
 
 // 按ID搜索已借出图书
@@ -48,7 +46,7 @@ static book_lent_info * GetLentInfoById(int id);
 book_lent_info * CreateLentPrototype(int id_, int license_, time_t borrow_time_);
 
 // 返回已借出图书链表 
-tListStruct * GetBookLentList() ;
+tListStruct * GetBookLentList();
 
 // 加入新的已借出数据至链表 
 int AddToBookLentList(book_lent_info * pLentBook);
@@ -65,11 +63,12 @@ int GetLentId(tListNode * pNode);
 // 修改图书过期时间 
 int SetLentExpireTime(int id, time_t expire_time_);
 
-// 修改图书罚金 
-int SetLentFine(int id, double fine_);
-
 // 返回已借出的图书的信息项 
 void * GetLentBookInfo(int id, LentInfoFlag sFlag);
+
+// 深层删除节点 
+int DeleteBookLentListCondition(tListNode *pNode, void *arg);
+void DeleteBookLentList();
 
 #endif
 

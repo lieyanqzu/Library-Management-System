@@ -47,6 +47,8 @@
     
     void testListNode()
     {
+        tListNode *node, *headNode, *tailNode;
+        tListNode * newHead;
         tListStruct * list = CreateList();
         int i;
         
@@ -67,7 +69,6 @@
             AddListNode(list, (void*)&testSimple[i], NULL, NULL);
         }
         
-        tListNode *node, *headNode, *tailNode;
         node = headNode = GetListHead(list);
         tailNode = GetListTail(list);
         
@@ -84,7 +85,7 @@
         
         // 测试 DeleteListNode
         if (DeleteListNode(list, headNode) == SUCCESS) {
-            tListNode * newHead = GetListHead(list);
+            newHead = GetListHead(list);
             assert(( (tSimple*)(newHead->data) )->data == testArray[1]);
         }
         
@@ -97,13 +98,13 @@
 // -----------------------------------------------------
     void testBook()
     {
+        book_info * pBook;
         // 声明测试数据
         int         id;
         char        isbn[3][ISBN_LEN] = {"9787111135104", "9787115357618", "9787115369093", };
         char        title[3][MAX_STR] = {"计算机程序的构造和解释", "编程珠玑", "重构 改善既有代码的设计", };
         char        author[3][MAX_STR] = {"艾伯森", "乔恩·本特利", "Martin Fowler"};
         char        press[3][MAX_STR] = {"机械工业出版社", "人民邮电出版社", "人民邮电出版社", };
-        time_t      public_time = time(NULL);
         double      price[3] = {45.0, 39.0, 69.0};
 
         int         dType;
@@ -115,7 +116,7 @@
             type = (BookType)dType;
 
             // 测试 CreateBookPrototype
-            book_info * pBook = CreateBookPrototype(isbn[i], title[i], author[i], press[i], public_time, price[i], type);
+            pBook = CreateBookPrototype(isbn[i], title[i], author[i], press[i], price[i], type);
 
             // 测试 AddToBooksList
             id = AddToBooksList(pBook);
@@ -170,7 +171,12 @@
         char name[3][STR_LEN] = {"张三", "李四", "王五", };
         char classes[3][STR_LEN] = {"网149", "网148", "", };
         AccountRank rank[3] = {STUDENT, STUDENT, TEACHER, };
-
+        char nameChange[STR_LEN] = "赵六";
+        
+        tListNode * pHeadAcc;
+        account_info * headAcc;
+        tListNode * pNextAcc;
+        account_info * nextAcc;
         tListStruct * pAccList = GetAccountList();
 
         int i;
@@ -179,17 +185,16 @@
         }
 
         // 测试 AddToAccountList
-        tListNode * pHeadAcc = GetListHead(pAccList);
-        account_info * headAcc = (account_info*)(pHeadAcc->data);
+        pHeadAcc = GetListHead(pAccList);
+        headAcc = (account_info*)(pHeadAcc->data);
         assert(headAcc->license == license[2]);
 
-        tListNode * pNextAcc = GetListNext(pHeadAcc);
-        account_info * nextAcc = (account_info*)(pNextAcc->data);
+        pNextAcc = GetListNext(pHeadAcc);
+        nextAcc = (account_info*)(pNextAcc->data);
         assert(nextAcc->license == license[1]);
 
         // 测试 Setter/Getter
         assert(strcmp((char*)GetAccountInfo(license[0], NAME), name[0]) == 0);
-        char nameChange[STR_LEN] = "赵六";
         ModifyAccountInfo(license[0], (void*)nameChange, NAME);
         assert(strcmp((char*)GetAccountInfo(license[0], NAME), nameChange) == 0);
     }

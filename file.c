@@ -1,3 +1,17 @@
+/*******************************************************
+ File name: file.c  
+ 
+ Date: 2015.12.21
+ 
+ Description: 包含对文件的操作 
+    
+ Dependency: book book_lent account setting statistics
+
+ History: 2015.12.22 增加 Setting、Statistics
+ 
+********************************************************/
+
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -5,6 +19,7 @@
 #include "book_lent.h"
 #include "account.h"
 #include "setting.h"
+#include "statistics.h"
 
 #include "file.h"
 
@@ -14,6 +29,7 @@ void WriteBookFile()
     tListNode *pNode = NULL;
     book_info *pBook = NULL;
 
+    // 分别写入三个链表 
     FILE *fp = fopen("book.dat", "w");
     pList = GetListByType(BOOK);
     fprintf(fp, "%d ", pList->length);
@@ -50,6 +66,7 @@ void WriteBookFile()
 
 void InitializeBook()
 {
+    tListNode *pNode = NULL;
     tListStruct *pList = NULL;
     book_info *pBook = NULL;
     stock_info *pStock = NULL;
@@ -61,14 +78,23 @@ void InitializeBook()
         return;
     }
     else {
+        // 分别读取三个链表 
         pList = GetListByType(BOOK);
         fscanf(fp, "%d ", &length);
         for (i = 0; i < length; i++) {
             pBook = (book_info*)malloc(sizeof(book_info));
             fread(pBook, sizeof(book_info), 1, fp);
-            pStock = (stock_info*)malloc(sizeof(stock_info));
-            fread(pStock, sizeof(stock_info), 1, fp);
-            pBook->stock = pStock;
+            pNode = SearchBookByISBN(pList, pBook->isbn);
+            if (pNode != NULL) {
+                fread(pStock, sizeof(stock_info), 1, fp);
+                pStock = ( (book_info*)(pNode->data) )->stock;
+                pBook->stock = pStock;
+            }
+            else {
+                pStock = (stock_info*)malloc(sizeof(stock_info));
+                fread(pStock, sizeof(stock_info), 1, fp);
+                pBook->stock = pStock;
+            }
             AddListNode(pList, (void*)pBook, NULL, NULL);
         }
 
@@ -77,9 +103,16 @@ void InitializeBook()
         for (i = 0; i < length; i++) {
             pBook = (book_info*)malloc(sizeof(book_info));
             fread(pBook, sizeof(book_info), 1, fp);
-            pStock = (stock_info*)malloc(sizeof(stock_info));
-            fread(pStock, sizeof(stock_info), 1, fp);
-            pBook->stock = pStock;
+            pNode = SearchBookByISBN(pList, pBook->isbn);
+            if (pNode != NULL) {
+                pStock = ( (book_info*)(pNode->data) )->stock;
+                pBook->stock = pStock;
+            }
+            else {
+                pStock = (stock_info*)malloc(sizeof(stock_info));
+                fread(pStock, sizeof(stock_info), 1, fp);
+                pBook->stock = pStock;
+            }
             AddListNode(pList, (void*)pBook, NULL, NULL);
         }
 
@@ -88,9 +121,16 @@ void InitializeBook()
         for (i = 0; i < length; i++) {
             pBook = (book_info*)malloc(sizeof(book_info));
             fread(pBook, sizeof(book_info), 1, fp);
-            pStock = (stock_info*)malloc(sizeof(stock_info));
-            fread(pStock, sizeof(stock_info), 1, fp);
-            pBook->stock = pStock;
+            pNode = SearchBookByISBN(pList, pBook->isbn);
+            if (pNode != NULL) {
+                pStock = ( (book_info*)(pNode->data) )->stock;
+                pBook->stock = pStock;
+            }
+            else {
+                pStock = (stock_info*)malloc(sizeof(stock_info));
+                fread(pStock, sizeof(stock_info), 1, fp);
+                pBook->stock = pStock;
+            }
             AddListNode(pList, (void*)pBook, NULL, NULL);
         }
     }
@@ -162,6 +202,7 @@ void InitializeAccount()
 
     FILE *fp = fopen("account.dat", "r");
     if (NULL == fp) {
+        // 预置10000号管理员 
         AddToAccountList(CreateAccountPrototype(10000, "Admin", "Admin", ADMIN));
         WriteAccountFile();
     }
@@ -189,6 +230,7 @@ void InitializeSetting()
     Setting * set = GetSetting();
     FILE *fp = fopen("setting.dat", "r");
     if (NULL == fp) {
+        // 预置配置文件 
         set->teacher_borrow_number = 10;
         set->student_borrow_number = 7;
         set->teacher_renew_times = 2;
@@ -201,3 +243,43 @@ void InitializeSetting()
     }
     fclose(fp);
 }
+
+void WriteStatistics()
+{
+    tListStruct *pList = GetStatisticsList();
+    tListNode *pNode;
+    statistics_info *pStat;
+
+    FILE *fp = fopen("statistics.dat", "w");
+    fprintf(fp, "%d ", pList->length);
+    pNode = GetListHead(pList);
+    while(pNode != NULL) {
+        pStat = (statistics_info*)(pNode->data);
+        fwrite(pStat, sizeof(statistics_info), 1, fp);
+        pNode = GetListNext(pNode);
+    }
+    fclose(fp);
+}
+
+void InitializeStatistics()
+{
+    tListStruct *pList = GetStatisticsList();
+    statistics_info *pStat;
+    int length = 0;
+    int i;
+
+    FILE *fp = fopen("statistics.dat", "r");
+    if (NULL == fp) {
+        return;
+    }
+    else {
+        fscanf(fp, "%d ", &length);
+        for (i = 0; i < length; i++) {
+            pStat = (statistics_info*)malloc(sizeof(statistics_info));
+            fread(pStat, sizeof(statistics_info), 1, fp);
+            AddListNode(pList, (void*)pStat, NULL, NULL);
+        }
+    }
+    fclose(fp);
+}
+

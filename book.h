@@ -9,7 +9,7 @@
     
  Dependency: list_node
 
- History: 
+ History: 2015.12.22 修改部分代码 
  
 ********************************************************/
 
@@ -35,8 +35,6 @@ typedef enum {
 typedef enum {
     IDLE = 0, 
     LENT = 1, 
-    RESERVED = 2, 
-    OFF_SHELF = 3, 
 } BookStatus;
 
 // 调用Setter/Getter方法时需要修改的内容项 
@@ -45,11 +43,10 @@ typedef enum {
     TITLE = 1, 
     AUTHOR = 2, 
     PRESS = 3, 
-    PUBLIC_TIME = 4, 
-    PRICE = 5, 
-    TYPE = 6, 
-    STATUS = 7, 
-    STOCK = 8, 
+    PRICE = 4, 
+    TYPE = 5, 
+    STATUS = 6, 
+    STOCK = 7, 
 } InfoFlag;
 
 // 图书库存信息
@@ -66,7 +63,6 @@ typedef struct {
     char        title[MAX_STR];
     char        author[MAX_STR];
     char        press[MAX_STR];
-    time_t      public_time;
     double      price;
     BookType    type;
     BookStatus  status;
@@ -74,14 +70,8 @@ typedef struct {
 } book_info;
 
 // 创建图书信息结构 
-book_info * CreateBookPrototype(char *isbn, char *title_, char *author_, char *press_, 
-    time_t time_, double price_, BookType type_);
-
-// 按ID搜索 
-static int SearchBookCondition(tListNode *pListNode, void *arg);
-
-// 按ISBN搜索 
-static int SearchISBNCondition(tListNode *pListNode, void *arg);
+book_info * CreateBookPrototype(char *isbn_, char *title_, char *author_, 
+    char *press_, double price_, BookType type_);
 
 // 获取链表表示的图书类型 
 static BookType GetListFlag(tListStruct * pList);
@@ -90,10 +80,15 @@ static BookType GetListFlag(tListStruct * pList);
 static tListStruct * GetListByNode(tListNode * pNode);
 
 // 按ID搜索图书节点 
-static tListNode * SearchBookById(int id);
+static int SearchBookCondition(tListNode *pNode, void *arg);
+tListNode * SearchBookById(int id);
+
+// 按ISBN搜索图书节点 
+static int SearchISBNCondition(tListNode *pNode, void *arg);
+tListNode * SearchBookByISBN(tListStruct *pList, char *isbn);
 
 // 返回所需要的链表
-tListStruct * GetListByType(BookType type); 
+tListStruct * GetListByType(BookType type);
 
 // 把图书信息结构加入链表 
 int AddToBooksList(book_info * pBookInfo);
@@ -101,14 +96,16 @@ int AddToBooksList(book_info * pBookInfo);
 // 删除图书 
 int RemoveBookById(int id);
 
-// 修改图书信息 
+// 修改/获取图书信息 
 int ModifyBookInfo(int id, void * arg, InfoFlag mFlag);
-
-// 获取图书信息 
 void * GetBookInfo(int id, InfoFlag gFlag);
 
 // 返回图书节点ID 
-int GetBookID(tListNode * pNode); 
+int GetBookID(tListNode * pNode);
+
+// 深层删除节点 
+int DeleteBookListCondition(tListNode *pNode, void *arg); 
+void DeleteBookList();
 
 #endif
 

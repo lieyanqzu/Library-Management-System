@@ -14,6 +14,6 @@ set(SOURCE_FILES
     list_node.h
     test.c
     unit_test.c
-    unit_test.h)
+    unit_test.h main.c interact.c interact.h file.c file.h operation.c operation.h)
 
 add_executable(LMS ${SOURCE_FILES})

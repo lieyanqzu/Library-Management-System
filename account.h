@@ -52,14 +52,12 @@ tListStruct * GetAccountList();
 // 建立账户信息原型
 account_info * CreateAccountPrototype(int license_, char *name_, char *classes_, AccountRank rank_);
 
-// 按账号搜索条件 
-static int SearchAccountCondition(tListNode *pListNode, void *arg);
-
-// 用于按账户号插入的条件
-static int AddAccountCondition(tListNode * pNode, tListNode * pAddNode, void * arg);
-
 // 按账号搜索账户节点 
+static int SearchAccountCondition(tListNode *pNode, void *arg);
 tListNode * SearchAccountByLicense(int license);
+
+// 用于按账号插入的条件
+static int AddAccountCondition(tListNode * pNode, tListNode * pAddNode, void * arg);
 
 // 返回节点的账户号
 int GetLicenseByNode(tListNode * pNode);
@@ -70,11 +68,13 @@ int AddToAccountList(account_info * pAcc);
 // 注销一个账户 
 int RemoveAccountByLicense(int license);
 
-// 修改账户信息 
+// 修改/获取账户信息 
 int ModifyAccountInfo(int license, void * arg, AccountFlag mFlag);
-
-// 获取账户信息 
 void * GetAccountInfo(int license, AccountFlag gFlag);
+
+// 深层删除节点 
+int DeleteAccountListCondition(tListNode *pNode, void *arg); 
+void DeleteAccountList();
  
 #endif
 

@@ -36,7 +36,7 @@ tListStruct * CreateList();
 
 // 删除链表[，可选深入释放内层申请内存 ]
 int DeleteList(tListStruct *pListStruct, 
-    void DeepDelete(tListNode * pNode, void * args), void * args);
+    int DeepDelete(tListNode * pNode, void * args), void * args);
 
 // 增加链表节点至链表尾部[，可选按条件插入节点] 
 int AddListNode(tListStruct *pListStruct, void *pData,

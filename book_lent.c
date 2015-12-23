@@ -19,6 +19,8 @@
 #include "book.h"
 #include "book_lent.h"
 
+#define TIME_MONTH 2592000
+
 /*
 // 已借出图书信息 
 typedef struct {
@@ -62,8 +64,7 @@ book_lent_info * CreateLentPrototype(int id_, int license_, time_t borrow_time_)
     pLentBook->id = id_;
     pLentBook->license = license_;
     pLentBook->borrow_time = borrow_time_;
-    pLentBook->expire_time = borrow_time_;
-    pLentBook->fine = 0.0;
+    pLentBook->expire_time = borrow_time_ + TIME_MONTH;
     
     return pLentBook;
 }
@@ -125,15 +126,6 @@ int SetLentExpireTime(int id, time_t expire_time_)
     return SUCCESS;
 }
 
-// 修改图书罚金 
-int SetLentFine(int id, double fine_)
-{
-    book_lent_info * pLent = GetLentInfoById(id);
-    
-    pLent->fine = fine_;
-    return SUCCESS;
-}
-
 // 返回已借出的图书的信息项 
 void * GetLentBookInfo(int id, LentInfoFlag sFlag)
 {
@@ -147,8 +139,6 @@ void * GetLentBookInfo(int id, LentInfoFlag sFlag)
         return (void*) (&(pLent->borrow_time));
     case EXPIRE_TIME:
         return (void*) (&(pLent->expire_time));
-    case FINE:
-        return (void*) (&(pLent->fine));
     default:
         return NULL;
     } 
@@ -159,5 +149,11 @@ int DeleteBookLentListCondition(tListNode *pNode, void *arg)
     book_lent_info *pLent = (book_lent_info*)(pNode->data);
     free(pLent);
     return SUCCESS;
+}
+
+// 深层删除节点 
+void DeleteBookLentList()
+{
+    DeleteList(bookLentList, DeleteBookLentListCondition, NULL);
 }
 
