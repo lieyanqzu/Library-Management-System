@@ -49,7 +49,7 @@ tListStruct * CreateList()
 
 // 删除链表[，可选深入释放内层申请内存]
 int DeleteList(tListStruct *pListStruct, 
-    void DeepDelete(tListNode * pNode, void * args), void * args)
+    int DeepDelete(tListNode * pNode, void * args), void * args)
 {
 	tListNode *p = NULL;
 

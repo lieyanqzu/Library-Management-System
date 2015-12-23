@@ -1206,7 +1206,6 @@ int ShowBookPage(int license, tListNode *pNode)
     int get_id;
     char title[MAX_STR];
     char isbn[ISBN_LEN];
-    AccountRank rank;
     int i;
     int num = 0;
     system("cls");
@@ -1491,12 +1490,13 @@ void ShowBookSearchForAdmin(int license, int id)
 void ShowBookSearchForUser(int license, int id)
 {
     int num, index;
-    int get_license;
+    int get_license; 
+    char c2;
+    
     START:
     system("cls");
     ShowHeadInfo(license);
     ShowBookInfo(id);
-    char c2;
     
     get_license = *(int*)GetLentBookInfo(id, LICENSE);
     if (get_license == license) {
